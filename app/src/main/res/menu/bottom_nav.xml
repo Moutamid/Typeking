@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_view" android:icon="@drawable/round_play_arrow_24" android:title="View" />
+    <item android:id="@+id/nav_subscribe" android:icon="@drawable/round_subscriptions_24" android:title="Subscribe" />
+    <item android:id="@+id/nav_like" android:icon="@drawable/round_thumb_up_24" android:title="Like" />
+    <item android:id="@+id/nav_campaign" android:icon="@drawable/round_campaign_24" android:title="Campaign" />
+</menu>

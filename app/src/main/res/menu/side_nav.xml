@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_menu_view"
+    tools:showIn="navigation_view">
+
+    <item android:id="@+id/nav_buy"
+        android:icon="@drawable/round_add_shopping_cart_24"
+        android:title="Buy Coin" />
+
+    <item android:id="@+id/nav_vip"
+        android:icon="@drawable/round_account_circle_24"
+        android:title="VIP account" />
+
+    <item android:id="@+id/nav_ads"
+        android:icon="@drawable/baseline_monetization_on_24"
+        android:title="Watch ads video" />
+
+    <item android:id="@+id/nav_invite"
+        android:icon="@drawable/round_share_24"
+        android:title="Invite friends" />
+
+    <item android:title="Communicate">
+        <menu>
+            <item android:id="@+id/nav_faq"
+                android:icon="@drawable/round_question_answer_24"
+                android:title="FAQ" />
+
+            <item android:id="@+id/nav_rate"
+                android:icon="@drawable/round_star_24"
+                android:title="Rate App" />
+
+            <item android:id="@+id/nav_feedback"
+                android:icon="@drawable/round_feedback_24"
+                android:title="Feedback" />
+
+            <item android:id="@+id/nav_privacy"
+                android:icon="@drawable/round_privacy_tip_24"
+                android:title="Privacy Policy" />
+
+            <item android:id="@+id/nav_logout"
+                android:icon="@drawable/round_logout_24"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Typeking</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="unsubscribe_warning"><b>DO NOT <u>Unsubscribe</u></b> any channels or <b><u>Unlike</u></b> any videos we will <b>block</b> your account if you <u>unsubscribe  any channel or unlike any video</u></string>
+    <string name="unlike_warning"><b>Do Not <u>Unlike</u></b> any videos we will <b>block</b> your account if you <u>unlike any video</u></string>
+    <string name="vip_upgrade">Upgrade to VIP account to get more benefit. Tap here to get more information</string>
+    <string name="campaign_message">Your campaign appear here. Click add button to create campaign to get subscribers for your channel</string>
+
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignInActivity">
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:text="@string/app_name"
+        android:textColor="@color/red"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:padding="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Get more subscriber, view and like for your channel"
+        android:layout_below="@id/appName"
+        android:gravity="center"
+        android:layout_marginStart="12sp"
+        android:layout_marginEnd="12sp"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="12sp"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="By login in with your Google account you agree with our privacy policy"
+        android:layout_below="@id/sign_in_button"
+        android:gravity="center"
+        android:layout_marginStart="12sp"
+        android:layout_marginEnd="12sp"/>
+
+</RelativeLayout>
