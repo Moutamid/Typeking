@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.moutamid.typeking.constant.Constants;
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
@@ -14,9 +16,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
-        }, 1000);
+            if (Constants.auth().getCurrentUser() != null){
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(this, SignInActivity.class));
+                finish();
+            }
+        }, 2000);
 
     }
 }

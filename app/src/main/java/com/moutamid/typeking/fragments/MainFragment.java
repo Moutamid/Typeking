@@ -1,5 +1,6 @@
 package com.moutamid.typeking.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,13 +10,21 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.fxn.stash.Stash;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.R;
+import com.moutamid.typeking.constant.Constants;
 import com.moutamid.typeking.databinding.FragmentMainBinding;
+import com.moutamid.typeking.models.UserDetails;
 
 public class MainFragment extends Fragment {
     FragmentMainBinding binding;
+    ProgressDialog progressDialog;
 
     public MainFragment() {
         // Required empty public constructor
@@ -28,6 +37,32 @@ public class MainFragment extends Fragment {
         getChildFragmentManager().beginTransaction().replace(R.id.framelayout, new ViewFragment()).commit();
         binding.bottomNav.setSelectedItemId(R.id.nav_view);
         binding.bottomNav.setOnNavigationItemSelectedListener(listener);
+
+        progressDialog = new ProgressDialog(requireContext());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.show();
+
+        Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            progressDialog.dismiss();
+                            UserDetails userDetails = snapshot.getValue(UserDetails.class);
+                            if (userDetails.isVipStatus()){
+                                binding.promotion.setVisibility(View.GONE);
+                            }
+                            Stash.put(Constants.VIP_STATUS, userDetails.isVipStatus());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        progressDialog.dismiss();
+                        Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         binding.close.setOnClickListener(v -> {
             binding.promotion.setVisibility(View.GONE);

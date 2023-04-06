@@ -10,4 +10,12 @@
     <string name="vip_upgrade">Upgrade to VIP account to get more benefit. Tap here to get more information</string>
     <string name="campaign_message">Your campaign appear here. Click add button to create campaign to get subscribers for your channel</string>
 
+
+    <string name="web_client_id" translatable="false">890062472575-miorkevdhgsr795467k3gh5ehqoi0tge.apps.googleusercontent.com</string>
+    <string name="defaultSenderId" translatable="false">890062472575</string>
+    <string name="youtube_api_key" translatable="false">AIzaSyBcgg_QpZ2O60W4UhMd28XbBclcQb8oCR4</string>
+
+    <string name="warning"><b>Warning:</b>\n\n - Do not create too many campaigns for one video, YT will not count many views from IP in very short time.\n- Video length must be at least 45 seconds.\n- YT needs 72 hours to update views from third party apps.\n\nSo please wait at least 72 hour to see your views updated on YT app. Use YT Studio to check view in real time.</string>
+
+
 </resources>

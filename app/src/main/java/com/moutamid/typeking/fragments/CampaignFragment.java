@@ -15,8 +15,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 
+import com.fxn.stash.Stash;
 import com.moutamid.typeking.AddVideoActivity;
 import com.moutamid.typeking.R;
+import com.moutamid.typeking.constant.Constants;
 import com.moutamid.typeking.databinding.FragmentCampaignBinding;
 
 public class CampaignFragment extends Fragment {
@@ -48,16 +50,19 @@ public class CampaignFragment extends Fragment {
         Button cancel = dialog.findViewById(R.id.cancel);
 
         all.setOnClickListener(v -> {
+            Stash.put(Constants.CAMPAIGN_SELECTION, 0);
             startActivity(new Intent(requireContext(), AddVideoActivity.class));
             dialog.dismiss();
         });
 
         view.setOnClickListener(v -> {
+            Stash.put(Constants.CAMPAIGN_SELECTION, 1);
             startActivity(new Intent(requireContext(), AddVideoActivity.class));
             dialog.dismiss();
         });
 
         like.setOnClickListener(v -> {
+            Stash.put(Constants.CAMPAIGN_SELECTION, 2);
             startActivity(new Intent(requireContext(), AddVideoActivity.class));
             dialog.dismiss();
         });
