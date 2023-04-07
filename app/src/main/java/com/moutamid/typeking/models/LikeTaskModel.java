@@ -4,12 +4,12 @@ public class LikeTaskModel {
     private String videoUrl, thumbnailUrl, posterUid, taskKey,
             totalLikesQuantity, completedDate;
     private int currentLikesQuantity;
-    private long createdTime;
+    private String createdTime;
 
     public LikeTaskModel() {
     }
 
-    public LikeTaskModel(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalLikesQuantity, String completedDate, int currentLikesQuantity, long createdTime) {
+    public LikeTaskModel(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalLikesQuantity, String completedDate, int currentLikesQuantity, String createdTime) {
         this.videoUrl = videoUrl;
         this.thumbnailUrl = thumbnailUrl;
         this.posterUid = posterUid;
@@ -76,11 +76,11 @@ public class LikeTaskModel {
         this.currentLikesQuantity = currentLikesQuantity;
     }
 
-    public long getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(long createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 }

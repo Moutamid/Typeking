@@ -103,13 +103,13 @@ public class SignInActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
 
-        Constants.databaseReference().child("user").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        Constants.databaseReference().child(Constants.USER).child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
                     UserDetails userDetails = new UserDetails(user.getDisplayName(), user.getEmail(), 0, false);
 
-                    Constants.databaseReference().child("user").child(user.getUid())
+                    Constants.databaseReference().child(Constants.USER).child(user.getUid())
                             .setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {

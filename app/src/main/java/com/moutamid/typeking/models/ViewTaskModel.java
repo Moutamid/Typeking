@@ -4,12 +4,12 @@ public class ViewTaskModel {
     private String videoUrl, thumbnailUrl, posterUid, taskKey,
             totalViewsQuantity, totalViewTimeQuantity, completedDate;
     private int currentViewsQuantity;
-    private long createdTime;
+    private String createdTime;
 
     public ViewTaskModel() {
     }
 
-    public ViewTaskModel(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalViewsQuantity, String totalViewTimeQuantity, String completedDate, int currentViewsQuantity, long createdTime) {
+    public ViewTaskModel(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalViewsQuantity, String totalViewTimeQuantity, String completedDate, int currentViewsQuantity, String createdTime) {
         this.videoUrl = videoUrl;
         this.thumbnailUrl = thumbnailUrl;
         this.posterUid = posterUid;
@@ -85,11 +85,11 @@ public class ViewTaskModel {
         this.currentViewsQuantity = currentViewsQuantity;
     }
 
-    public long getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(long createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 }

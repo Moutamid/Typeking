@@ -2,6 +2,7 @@ package com.moutamid.typeking.constant;
 
 import android.app.Activity;
 import android.os.Build;
+import android.util.Log;
 
 
 import androidx.annotation.NonNull;
@@ -14,17 +15,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Constants {
     public static final int RC_SIGN_IN = 9001;
+    public static final String USER = "user";
     public static final String CURRENT_COINS = "CURRENT_COINS";
+    public static final String VIEWER_PATH = "viewers";
     public static final String RECENT_IMAGE = "RECENT_IMAGE";
     public static final String RECENT_LINK = "RECENT_LINK";
     public static final String CAMPAIGN_SELECTION = "CAMPAIGN_SELECTION";
@@ -138,6 +147,81 @@ public class Constants {
             videoId = matcher.group(1);
         }
         return videoId;
+    }
+
+    public static class HttpHandler {
+        private String TAG = "HttpHandler";
+
+        public HttpHandler() {
+        }
+
+        public String makeServiceCall(String reqUrl) {
+            String response = null;
+            try {
+                URL url = new URL(reqUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                // read the response
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+
+                response = convertStreamToString(in);
+            } catch (MalformedURLException e) {
+                Log.e(TAG, "MalformedURLException: " + e.getMessage());
+            } catch (ProtocolException e) {
+                Log.e(TAG, "ProtocolException: " + e.getMessage());
+            } catch (IOException e) {
+                Log.e(TAG, "IOException: " + e.getMessage());
+            } catch (Exception e) {
+                Log.e(TAG, "Exception: " + e.getMessage());
+            }
+            return response;
+        }
+
+        private String convertStreamToString(InputStream is) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+            try {
+
+                while ((line = reader.readLine()) != null) {
+
+                    sb.append(line).append('\n');
+
+                }
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+            } finally {
+
+                try {
+
+                    is.close();
+
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+
+            return sb.toString();
+        }
+    }
+
+    public static String getDate() {
+
+        try {
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm aa dd/MM/yyyy");
+            return sdf.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "Error";
+
     }
 
 }

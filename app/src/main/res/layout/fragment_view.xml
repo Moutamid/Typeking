@@ -23,7 +23,7 @@
                 android:id="@+id/youtube_player_view_fragment_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:enableAutomaticInitialization="true"
+                app:enableAutomaticInitialization="false"
                 app:handleNetworkEvents="true" />
 
         </androidx.cardview.widget.CardView>
@@ -45,6 +45,7 @@
                 android:text="Auto play" />
 
             <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_auto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -65,11 +66,12 @@
                 android:padding="15sp">
 
                 <TextView
+                    android:id="@+id/rewardCoins"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textSize="32sp"
-                    android:text="51" />
+                    android:text="0" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -92,11 +94,12 @@
                 android:padding="15sp">
 
                 <TextView
+                    android:id="@+id/seconds"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textSize="32sp"
-                    android:text="51" />
+                    android:text="0" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -107,12 +110,14 @@
 
         </LinearLayout>
 
-        <View
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressIndicator"
             android:layout_width="match_parent"
-            android:layout_height="2sp"
-            android:background="@color/red" />
+            android:layout_height="11sp"
+            android:progress="100"/>
 
         <Button
+            android:id="@+id/seeOther"
             style="@style/Widget.Material3.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

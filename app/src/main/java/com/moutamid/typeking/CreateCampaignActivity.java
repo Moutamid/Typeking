@@ -209,7 +209,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                                             task1.setCurrentViewsQuantity(0);
                                             task1.setPosterUid(Constants.auth().getCurrentUser().getUid());
                                             task1.setTaskKey(key);
-                                            task1.setCreatedTime(new Date().getTime());
+                                            task1.setCreatedTime(Constants.getDate());
 
                                             Constants.databaseReference().child(Constants.VIEW_TASKS).child(key).setValue(task1)
                                                     .addOnCompleteListener(task2 -> {
@@ -273,7 +273,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                                             task1.setCurrentLikesQuantity(0);
                                             task1.setPosterUid(Constants.auth().getCurrentUser().getUid());
                                             task1.setTaskKey(key);
-                                            task1.setCreatedTime(new Date().getTime());
+                                            task1.setCreatedTime(Constants.getDate());
 
                                             Constants.databaseReference().child(Constants.LIKE_TASKS).child(key).setValue(task1)
                                                     .addOnCompleteListener(task2 -> {
@@ -337,7 +337,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                                             task1.setCurrentSubscribesQuantity(0);
                                             task1.setPosterUid(Constants.auth().getCurrentUser().getUid());
                                             task1.setTaskKey(key);
-                                            task1.setCreatedTime(new Date().getTime());
+                                            task1.setCreatedTime(Constants.getDate());
 
                                             Constants.databaseReference().child(Constants.SUBSCRIBE_TASKS).child(key).setValue(task1)
                                                     .addOnCompleteListener(task2 -> {
@@ -597,7 +597,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            HttpHandler sh = new HttpHandler();
+            Constants.HttpHandler sh = new Constants.HttpHandler();
 
             String url = "https://www.youtube.com/oembed?format=json&url=" + id;//https://www.youtube.com/watch?v=" + id;
 
@@ -658,67 +658,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 //binding.youtubePlayerViewFragmentView.getPlayerUiController().setVideoTitle(s);
             }
 
-        }
-    }
-    private static class HttpHandler {
-
-        private String TAG = "HttpHandler";
-
-        public HttpHandler() {
-        }
-
-        public String makeServiceCall(String reqUrl) {
-            String response = null;
-            try {
-                URL url = new URL(reqUrl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                // read the response
-                InputStream in = new BufferedInputStream(conn.getInputStream());
-
-                response = convertStreamToString(in);
-            } catch (MalformedURLException e) {
-                Log.e(TAG, "MalformedURLException: " + e.getMessage());
-            } catch (ProtocolException e) {
-                Log.e(TAG, "ProtocolException: " + e.getMessage());
-            } catch (IOException e) {
-                Log.e(TAG, "IOException: " + e.getMessage());
-            } catch (Exception e) {
-                Log.e(TAG, "Exception: " + e.getMessage());
-            }
-            return response;
-        }
-
-        private String convertStreamToString(InputStream is) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-            try {
-
-                while ((line = reader.readLine()) != null) {
-
-                    sb.append(line).append('\n');
-
-                }
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            } finally {
-
-                try {
-
-                    is.close();
-
-                } catch (IOException e) {
-
-                    e.printStackTrace();
-                }
-            }
-
-            return sb.toString();
         }
     }
 

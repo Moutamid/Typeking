@@ -1,6 +1,7 @@
 package com.moutamid.typeking.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.moutamid.typeking.BillingActivity;
 import com.moutamid.typeking.R;
 import com.moutamid.typeking.constant.Constants;
 import com.moutamid.typeking.databinding.FragmentMainBinding;
@@ -66,6 +68,10 @@ public class MainFragment extends Fragment {
 
         binding.close.setOnClickListener(v -> {
             binding.promotion.setVisibility(View.GONE);
+        });
+
+        binding.promotion.setOnClickListener(v -> {
+            startActivity(new Intent(requireContext(), BillingActivity.class));
         });
 
         return binding.getRoot();

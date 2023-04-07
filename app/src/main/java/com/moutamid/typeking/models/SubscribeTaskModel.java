@@ -5,12 +5,12 @@ public class SubscribeTaskModel {
             totalSubscribesQuantity, completedDate;
     private int currentSubscribesQuantity;
     private boolean isSubscribed;
-    private long createdTime;
+    private String createdTime;
 
     public SubscribeTaskModel() {
     }
 
-    public SubscribeTaskModel(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalSubscribesQuantity, String completedDate, int currentSubscribesQuantity, boolean isSubscribed, long createdTime) {
+    public SubscribeTaskModel(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalSubscribesQuantity, String completedDate, int currentSubscribesQuantity, boolean isSubscribed, String createdTime) {
         this.videoUrl = videoUrl;
         this.thumbnailUrl = thumbnailUrl;
         this.posterUid = posterUid;
@@ -86,11 +86,11 @@ public class SubscribeTaskModel {
         this.currentSubscribesQuantity = currentSubscribesQuantity;
     }
 
-    public long getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(long createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 

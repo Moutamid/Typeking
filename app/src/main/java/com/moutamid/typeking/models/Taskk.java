@@ -3,11 +3,11 @@ package com.moutamid.typeking.models;
 public class Taskk {
     String videoUrl, thumbnailUrl, posterUid, taskKey, totalViewsQuantity, totalViewTimeQuantity, completedDate;
     int currentViewsQuantity;
-
+    String createdTime;
     public Taskk() {
     }
 
-    public Taskk(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalViewsQuantity, String totalViewTimeQuantity, String completedDate, int currentViewsQuantity) {
+    public Taskk(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalViewsQuantity, String totalViewTimeQuantity, String completedDate, int currentViewsQuantity, String createdTime) {
         this.videoUrl = videoUrl;
         this.thumbnailUrl = thumbnailUrl;
         this.posterUid = posterUid;
@@ -16,6 +16,15 @@ public class Taskk {
         this.totalViewTimeQuantity = totalViewTimeQuantity;
         this.completedDate = completedDate;
         this.currentViewsQuantity = currentViewsQuantity;
+        this.createdTime = createdTime;
+    }
+
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
     public String getVideoUrl() {
