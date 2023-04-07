@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){

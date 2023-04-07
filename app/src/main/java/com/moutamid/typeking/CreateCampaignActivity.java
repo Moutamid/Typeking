@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,9 +23,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fxn.stash.Stash;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 import com.moutamid.typeking.constant.Constants;
 import com.moutamid.typeking.databinding.ActivityCreateCampaignBinding;
+import com.moutamid.typeking.models.LikeTaskModel;
+import com.moutamid.typeking.models.SubscribeTaskModel;
+import com.moutamid.typeking.models.UserDetails;
+import com.moutamid.typeking.models.ViewTaskModel;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -43,12 +54,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Date;
 
 public class CreateCampaignActivity extends AppCompatActivity {
     ActivityCreateCampaignBinding binding;
     int CAMPAIGN_SELECTION = Stash.getInt(Constants.CAMPAIGN_SELECTION);
-    int CurrentCoins = Stash.getInt(Constants.CURRENT_COINS);
-    boolean VIP_STATUS = Stash.getBoolean(Constants.VIP_STATUS);
+    int CurrentCoins = 0;
+    boolean VIP_STATUS = false;
     String url;
     int totalCost = 0;
     int subDefault = 2100;
@@ -72,6 +84,25 @@ public class CreateCampaignActivity extends AppCompatActivity {
         url = Stash.getString(Constants.RECENT_LINK);
 
         binding.back.setOnClickListener(v -> onBackPressed());
+
+        Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            UserDetails userDetails = snapshot.getValue(UserDetails.class);
+                            CurrentCoins = userDetails.getCoins();
+                            VIP_STATUS = userDetails.isVipStatus();
+                            binding.coin.setText(userDetails.getCoins()+"");
+                            Stash.put(Constants.CURRENT_COINS, userDetails.getCoins());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(CreateCampaignActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         binding.coin.setText(CurrentCoins+"");
 
@@ -128,8 +159,219 @@ public class CreateCampaignActivity extends AppCompatActivity {
            pickerViewDialog();
         });
 
+        binding.done.setOnClickListener(v -> {
+            if (totalCost <= CurrentCoins){
+                if (CAMPAIGN_SELECTION == 0){
+                    uploadSubscribeCampaign();
+                }
+                if (CAMPAIGN_SELECTION == 1){
+                    uploadViewTask();
+                }
+                if (CAMPAIGN_SELECTION == 2){
+                    uploadLikeTask();
+                }
+            } else {
+                Toast.makeText(this, "Not Enough Coin", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, BillingActivity.class));
+                finish();
+            }
+        });
+
     }
 
+    private void uploadViewTask() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Creating Your Campaign..");
+        progressDialog.show();
+
+        Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            UserDetails userDetails = snapshot.getValue(UserDetails.class);
+                            Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
+                                    .child("coins")
+                                    .setValue(userDetails.getCoins() - totalCost)
+                                    .addOnCompleteListener(task -> {
+
+                                        if (task.isSuccessful()){
+                                            String key = Constants.databaseReference().child(Constants.VIEW_TASKS).push().getKey();
+
+                                            ViewTaskModel task1 = new ViewTaskModel();
+
+                                            task1.setVideoUrl(url);
+                                            task1.setThumbnailUrl(thumbnailUrl);
+                                            task1.setTotalViewsQuantity(Constants.viewQuantityArray[pickedView]);
+                                            task1.setTotalViewTimeQuantity(Constants.viewTimeArray[pickedViewTime]);
+                                            task1.setCompletedDate("error");
+                                            task1.setCurrentViewsQuantity(0);
+                                            task1.setPosterUid(Constants.auth().getCurrentUser().getUid());
+                                            task1.setTaskKey(key);
+                                            task1.setCreatedTime(new Date().getTime());
+
+                                            Constants.databaseReference().child(Constants.VIEW_TASKS).child(key).setValue(task1)
+                                                    .addOnCompleteListener(task2 -> {
+
+                                                        if (task2.isSuccessful()) {
+                                                            progressDialog.dismiss();
+                                                            Toast.makeText(CreateCampaignActivity.this, "Campaign Started Succesfully", Toast.LENGTH_SHORT).show();
+                                                            finish();
+
+                                                        } else {
+                                                            progressDialog.dismiss();
+                                                            Toast.makeText(CreateCampaignActivity.this, task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                    });
+
+                                        } else {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(CreateCampaignActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(CreateCampaignActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        progressDialog.dismiss();
+                        Toast.makeText(CreateCampaignActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+    private void uploadLikeTask() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Creating Your Campaign..");
+        progressDialog.show();
+
+        Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            UserDetails userDetails = snapshot.getValue(UserDetails.class);
+                            Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
+                                    .child("coins")
+                                    .setValue(userDetails.getCoins() - totalCost)
+                                    .addOnCompleteListener(task -> {
+
+                                        if (task.isSuccessful()){
+                                            String key = Constants.databaseReference().child(Constants.LIKE_TASKS).push().getKey();
+
+                                            LikeTaskModel task1 = new LikeTaskModel();
+                                            task1.setVideoUrl(url);
+                                            task1.setThumbnailUrl(thumbnailUrl);
+                                            task1.setTotalLikesQuantity(Constants.subsQuantityArray[pickedLike]);
+                                            task1.setCompletedDate("error");
+                                            task1.setCurrentLikesQuantity(0);
+                                            task1.setPosterUid(Constants.auth().getCurrentUser().getUid());
+                                            task1.setTaskKey(key);
+                                            task1.setCreatedTime(new Date().getTime());
+
+                                            Constants.databaseReference().child(Constants.LIKE_TASKS).child(key).setValue(task1)
+                                                    .addOnCompleteListener(task2 -> {
+
+                                                        if (task2.isSuccessful()) {
+                                                            progressDialog.dismiss();
+                                                            Toast.makeText(CreateCampaignActivity.this, "Campaign Started Succesfully", Toast.LENGTH_SHORT).show();
+                                                            finish();
+
+                                                        } else {
+                                                            progressDialog.dismiss();
+                                                            Toast.makeText(CreateCampaignActivity.this, task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                    });
+
+                                        } else {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(CreateCampaignActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(CreateCampaignActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        progressDialog.dismiss();
+                        Toast.makeText(CreateCampaignActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+    private void uploadSubscribeCampaign() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Creating Your Campaign..");
+        progressDialog.show();
+
+        Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            UserDetails userDetails = snapshot.getValue(UserDetails.class);
+                            Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
+                                    .child("coins")
+                                    .setValue(userDetails.getCoins() - totalCost)
+                                    .addOnCompleteListener(task -> {
+
+                                        if (task.isSuccessful()){
+                                            String key = Constants.databaseReference().child(Constants.SUBSCRIBE_TASKS).push().getKey();
+
+                                            SubscribeTaskModel task1 = new SubscribeTaskModel();
+                                            task1.setVideoUrl(url);
+                                            task1.setThumbnailUrl(thumbnailUrl);
+                                            task1.setTotalSubscribesQuantity(Constants.subsQuantityArray[pickedSub]);
+                                            task1.setCompletedDate("error");
+                                            task1.setCurrentSubscribesQuantity(0);
+                                            task1.setPosterUid(Constants.auth().getCurrentUser().getUid());
+                                            task1.setTaskKey(key);
+                                            task1.setCreatedTime(new Date().getTime());
+
+                                            Constants.databaseReference().child(Constants.SUBSCRIBE_TASKS).child(key).setValue(task1)
+                                                    .addOnCompleteListener(task2 -> {
+
+                                                        if (task2.isSuccessful()) {
+                                                            progressDialog.dismiss();
+                                                            Toast.makeText(CreateCampaignActivity.this, "Campaign Started Succesfully", Toast.LENGTH_SHORT).show();
+                                                            finish();
+
+                                                        } else {
+                                                            progressDialog.dismiss();
+                                                            Toast.makeText(CreateCampaignActivity.this, task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                    });
+
+                                        } else {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(CreateCampaignActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(CreateCampaignActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        progressDialog.dismiss();
+                        Toast.makeText(CreateCampaignActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
     private void pickerViewDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -315,7 +557,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setGravity(Gravity.CENTER);
     }
-
     private void initYoutubePlayer() {
 
         YouTubePlayerView youTubePlayerView = binding.youtubePlayerViewFragmentView;
@@ -335,7 +576,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
         getVideoTitle.execute();
 
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

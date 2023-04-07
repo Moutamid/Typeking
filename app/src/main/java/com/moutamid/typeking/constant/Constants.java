@@ -29,6 +29,9 @@ public class Constants {
     public static final String RECENT_LINK = "RECENT_LINK";
     public static final String CAMPAIGN_SELECTION = "CAMPAIGN_SELECTION";
     public static final String VIP_STATUS = "VIP_STATUS";
+    public static final String LIKE_TASKS = "like_tasks";
+    public static final String VIEW_TASKS = "view_tasks";
+    public static final String SUBSCRIBE_TASKS = "subscribe_tasks";
 
     public static final String[] subsQuantityArray = new String[]{
             "10", "20", "30", "40", "50", "60", "70", "80", "90", "100",
