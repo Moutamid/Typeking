@@ -14,13 +14,14 @@
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="100sp"
+            android:layout_width="150sp"
             android:layout_height="100sp"
             app:cardCornerRadius="8sp"
             app:cardElevation="0dp"
             app:cardBackgroundColor="@color/light_red">
 
             <ImageView
+                android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"/>
@@ -36,6 +37,17 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/campaign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="0/50 views"
+                android:layout_marginBottom="10sp"
+                android:gravity="center_vertical"
+                android:textColor="@color/dark_grey" />
+
+            <TextView
+                android:id="@+id/views"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="0/50 views"
@@ -45,12 +57,16 @@
                 android:textColor="@color/dark_grey" />
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progressIndicator"
                 android:layout_width="match_parent"
-                android:layout_height="2sp" />
+                android:layout_height="11sp"
+                app:trackCornerRadius="26dp"
+                android:progress="0"/>
 
         </LinearLayout>
 
         <ImageButton
+            android:id="@+id/more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8sp"

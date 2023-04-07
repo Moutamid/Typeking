@@ -32,6 +32,9 @@ public class Constants {
     public static final String LIKE_TASKS = "like_tasks";
     public static final String VIEW_TASKS = "view_tasks";
     public static final String SUBSCRIBE_TASKS = "subscribe_tasks";
+    public static final String TYPE_VIEW = "TYPE_VIEW";
+    public static final String TYPE_LIKE = "TYPE_LIKE";
+    public static final String TYPE_SUBSCRIBE = "TYPE_SUBSCRIBE";
 
     public static final String[] subsQuantityArray = new String[]{
             "10", "20", "30", "40", "50", "60", "70", "80", "90", "100",

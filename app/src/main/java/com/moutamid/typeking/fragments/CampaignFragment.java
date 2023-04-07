@@ -6,23 +6,39 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.fxn.stash.Stash;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.AddVideoActivity;
 import com.moutamid.typeking.R;
+import com.moutamid.typeking.adapter.CampaignAdapter;
 import com.moutamid.typeking.constant.Constants;
 import com.moutamid.typeking.databinding.FragmentCampaignBinding;
+import com.moutamid.typeking.models.LikeTaskModel;
+import com.moutamid.typeking.models.SubscribeTaskModel;
+import com.moutamid.typeking.models.TasksTypeModel;
+import com.moutamid.typeking.models.ViewTaskModel;
+
+import java.util.ArrayList;
 
 public class CampaignFragment extends Fragment {
     FragmentCampaignBinding binding;
+    ArrayList<TasksTypeModel> allTasksArrayList = new ArrayList<>();
+    CampaignAdapter adapter;
     public CampaignFragment() {
         // Required empty public constructor
     }
@@ -36,7 +52,124 @@ public class CampaignFragment extends Fragment {
             showDialog();
         });
 
+        binding.recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recycler.setHasFixedSize(false);
+
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getViewTasksList();
+    }
+
+    private void getViewTasksList() {
+        Constants.databaseReference().child(Constants.VIEW_TASKS).orderByChild("posterUid")
+                .equalTo(Constants.auth().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        allTasksArrayList.clear();
+                        if (snapshot.exists()){
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                ViewTaskModel task = dataSnapshot.getValue(ViewTaskModel.class);
+                                TasksTypeModel tasksTypeModel = new TasksTypeModel();
+                                tasksTypeModel.setViewTaskModel(task);
+                                tasksTypeModel.setType(Constants.TYPE_VIEW);
+
+                                allTasksArrayList.add(tasksTypeModel);
+                            }
+                            getLikeTasksList();
+                        } else {
+                            getLikeTasksList();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void getLikeTasksList() {
+        Constants.databaseReference().child(Constants.LIKE_TASKS).orderByChild("posterUid")
+                .equalTo(Constants.auth().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                                LikeTaskModel task = dataSnapshot.getValue(LikeTaskModel.class);
+
+                                TasksTypeModel tasksTypeModel = new TasksTypeModel();
+                                tasksTypeModel.setLikeTaskModel(task);
+                                tasksTypeModel.setType(Constants.TYPE_LIKE);
+
+                                allTasksArrayList.add(tasksTypeModel);
+
+                            }
+                            getSubscribeTasksList();
+                        } else {
+                            getSubscribeTasksList();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void getSubscribeTasksList() {
+        Constants.databaseReference().child(Constants.SUBSCRIBE_TASKS).orderByChild("posterUid")
+                .equalTo(Constants.auth().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                                SubscribeTaskModel task = dataSnapshot.getValue(SubscribeTaskModel.class);
+
+                                TasksTypeModel tasksTypeModel = new TasksTypeModel();
+                                tasksTypeModel.setSubscribeTaskModel(task);
+                                tasksTypeModel.setType(Constants.TYPE_SUBSCRIBE);
+
+                                allTasksArrayList.add(tasksTypeModel);
+
+                            }
+                            initRecyclerView();
+                        } else {
+                            initRecyclerView();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+    }
+
+    private void initRecyclerView() {
+        if (allTasksArrayList.size() > 0){
+            binding.noCampLayout.setVisibility(View.GONE);
+            binding.recycler.setVisibility(View.VISIBLE);
+
+            adapter = new CampaignAdapter(requireContext(), allTasksArrayList);
+            binding.recycler.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+        } else {
+            binding.noCampLayout.setVisibility(View.VISIBLE);
+            binding.recycler.setVisibility(View.GONE);
+        }
     }
 
     private void showDialog() {
