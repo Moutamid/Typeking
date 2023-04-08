@@ -33,6 +33,7 @@ import com.moutamid.typeking.models.TasksTypeModel;
 import com.moutamid.typeking.models.ViewTaskModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CampaignFragment extends Fragment {
     FragmentCampaignBinding binding;
@@ -110,8 +111,10 @@ public class CampaignFragment extends Fragment {
                                 allTasksArrayList.add(tasksTypeModel);
 
                             }
+                            Collections.reverse(allTasksArrayList);
                             getSubscribeTasksList();
                         } else {
+                            Collections.reverse(allTasksArrayList);
                             getSubscribeTasksList();
                         }
                     }
@@ -141,8 +144,10 @@ public class CampaignFragment extends Fragment {
                                 allTasksArrayList.add(tasksTypeModel);
 
                             }
+                            Collections.reverse(allTasksArrayList);
                             initRecyclerView();
                         } else {
+                            Collections.reverse(allTasksArrayList);
                             initRecyclerView();
                         }
                     }
