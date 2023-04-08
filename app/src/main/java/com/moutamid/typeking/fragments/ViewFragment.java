@@ -3,9 +3,12 @@ package com.moutamid.typeking.fragments;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +35,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.BillingActivity;
 import com.moutamid.typeking.R;
+import com.moutamid.typeking.services.ForegroundService;
 import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.FragmentViewBinding;
 import com.moutamid.typeking.models.Taskk;
@@ -46,6 +51,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTube
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ViewFragment extends Fragment {
     private ArrayList<Taskk> taskArrayList = new ArrayList<>();
@@ -78,6 +85,8 @@ public class ViewFragment extends Fragment {
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
+
+        Stash.put(Constants.COIN, currentPoints);
 
         Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
                 .addValueEventListener(new ValueEventListener() {
@@ -378,15 +387,19 @@ public class ViewFragment extends Fragment {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+
+                                        Map<String, Object> map = new HashMap<>();
+                                        map.put("user", Constants.auth().getCurrentUser().getUid());
+                                        map.put("date", Constants.getDate());
+
                                         Constants.databaseReference().child(Constants.VIEW_TASKS)
                                                 .child(taskArrayList.get(currentPosition).getTaskKey())
                                                 .child(Constants.VIEWER_PATH)
-                                                .child(Constants.auth().getCurrentUser().getUid())
-                                                .setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                .push()
+                                                .setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         setNewVideoPlayerDetails();
-
                                                     }
                                                 });
 
@@ -439,7 +452,8 @@ public class ViewFragment extends Fragment {
 
         @Override
         public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-            progressbar.setVisibility(View.GONE);
+
+            //progressbar.setVisibility(View.GONE);
         }
 
         @Override
@@ -461,6 +475,25 @@ public class ViewFragment extends Fragment {
             progressbar.setProgress(Math.round(v));
             videoDurationTextView.setText(Math.round(v)+":"+dur);
             showToastOnDifferentSec(Math.round(v));
+
+            if (Math.round(v) == 5){
+                if (checkOverlayPermission()){
+                    startService();
+                    String url = taskArrayList.get(currentPosition).getVideoUrl();
+                    Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + Constants.getVideoId(url)));
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("http://www.youtube.com/watch?v=" + Constants.getVideoId(url)));
+                    binding.youtubePlayerViewFragmentView.release();
+                    try {
+                        context.startActivity(appIntent);
+                    } catch (ActivityNotFoundException ex) {
+                        context.startActivity(webIntent);
+                    }
+                }
+
+
+            }
+
         }
 
         @Override
@@ -471,12 +504,54 @@ public class ViewFragment extends Fragment {
             int s = 0;
             try {
                 s = Integer.parseInt(binding.seconds.getText().toString());
-            } catch (Exception e) {
-
-            }
+            } catch (Exception e) {e.printStackTrace();}
             binding.progressIndicator.setMax(s);
+            Stash.put(Constants.TIME, s);
+
+
         }
 
     }
 
+    public boolean checkOverlayPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(requireContext())) {
+                // send user to the device settings
+                Intent myIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                startActivity(myIntent);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void startService(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(Settings.canDrawOverlays(requireContext())) {
+                // start the service based on the android version
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Intent i = new Intent(requireContext(), ForegroundService.class);
+                    requireContext().startForegroundService(i);
+                } else {
+                    Intent i = new Intent(requireContext(), ForegroundService.class);
+                    requireContext().startService(i);
+                }
+            }
+        }else{
+            Intent i = new Intent(requireContext(), ForegroundService.class);
+            requireContext().startService(i);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        binding.youtubePlayerViewFragmentView.release();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding.youtubePlayerViewFragmentView.release();
+    }
 }

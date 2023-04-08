@@ -70,7 +70,9 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -557,13 +559,15 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-
+                                        Map<String, Object> map = new HashMap<>();
+                                        map.put("user", Constants.auth().getCurrentUser().getUid());
+                                        map.put("date", Constants.getDate());
                                         Constants.databaseReference()
                                                 .child(Constants.SUBSCRIBE_TASKS)
                                                 .child(subscribeTaskModelArrayList.get(currentCounter).getTaskKey())
                                                 .child(Constants.SUBSCRIBER_PATH)
-                                                .child(Constants.auth().getCurrentUser().getUid())
-                                                .setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                .push()
+                                                .setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
 

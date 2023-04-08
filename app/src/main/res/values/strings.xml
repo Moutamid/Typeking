@@ -16,8 +16,8 @@
     <string name="youtube_api_key" translatable="false">AIzaSyBcgg_QpZ2O60W4UhMd28XbBclcQb8oCR4</string>
 
     <string name="warning"><b>Warning:</b>\n\n - Do not create too many campaigns for one video, YT will not count many views from IP in very short time.\n- Video length must be at least 45 seconds.\n- YT needs 72 hours to update views from third party apps.\n\nSo please wait at least 72 hour to see your views updated on YT app. Use YT Studio to check view in real time.</string>
-    <string name="month_subs">You will be charged Rs 650.00 + tax automatically every month until you cancel. Cancel anytime in Sbscription on Google Play.</string>
-    <string name="year_subs">Billing starts at the end of 7 days free trial. You will be charges RS 3300.00 + tax automatically every year until you cancel. Cancel anytime in Subscription on Google Play.</string>
+    <string name="month_subs">You will be charged Rs 650.00 + tax automatically every month until you cancel. Cancel anytime in Subscription on Google Play.</string>
+    <string name="year_subs">Billing starts at the end of 3 days free trial. You will be charges RS 1650.00 + tax automatically every 3 months until you cancel. Cancel anytime in Subscription on Google Play.</string>
     <string name="pros_vip">- Remove ads.\n- Reduce 10% campaign cost.\n- Remove countdown timer after subscribed channel.\n-Campaign limit up-to 10.\n- Add 10 daily quotas in Subscriber and Like tabs</string>
 
 </resources>
