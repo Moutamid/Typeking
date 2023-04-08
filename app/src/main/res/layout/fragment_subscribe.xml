@@ -17,12 +17,15 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="6sp"
             android:layout_weight="1"
+            app:cardBackgroundColor="@color/light_grey"
             android:layout_margin="10sp">
 
             <ImageView
+                android:id="@+id/videoImageSubscribe"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@color/light_red"/>
+                android:layout_gravity="center"
+                android:layout_height="250sp"
+                android:src="@drawable/round_subscriptions_24"/>
 
         </androidx.cardview.widget.CardView>
 
@@ -58,6 +61,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/subscribeBtn"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,6 +71,7 @@
                 android:textSize="16sp" />
 
             <Button
+                android:id="@+id/seeOther"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

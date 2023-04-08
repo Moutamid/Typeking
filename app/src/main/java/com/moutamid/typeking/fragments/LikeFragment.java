@@ -82,23 +82,13 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
 
     FragmentLikeBinding binding;
     private static final String TAG = "LikeFragment";
-
-  //  int remainingDailyLimitInt = Utils.getInt(Utils.getDate() + "Like", 0);
-
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-    private static final String BUTTON_TEXT = "Call YouTube Data API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {YouTubeScopes.YOUTUBE_READONLY, YouTubeScopes.YOUTUBE_FORCE_SSL};
-    private static final String CLIENT_SECRETS = "client_secret.json";
-    private static final Collection<String> SCOPE =
-            Arrays.asList("https://www.googleapis.com/auth/youtube.force-ssl", "https://www.googleapis.com/auth/youtube");
-
-    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     Video video;
-
     GoogleAccountCredential mCredential;
     String currentVideoLink;
     ProgressDialog mProgress;
@@ -216,7 +206,7 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
                         SharedPreferences settings =
-                                requireContext().getSharedPreferences("dev.moutamid.viewplussubsbooster", Context.MODE_PRIVATE);
+                                requireContext().getSharedPreferences("com.moutamid.typeking", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
@@ -475,7 +465,7 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
                 requireContext(), Manifest.permission.GET_ACCOUNTS)) {
-            String accountName = requireContext().getSharedPreferences("dev.moutamid.typeking", Context.MODE_PRIVATE)
+            String accountName = requireContext().getSharedPreferences("com.moutamid.typeking", Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
