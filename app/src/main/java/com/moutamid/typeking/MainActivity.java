@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, BillingActivity.class));
         });
 
-        Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
+        Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -81,6 +81,14 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_logout:
                     Constants.auth().signOut();
                     startActivity(new Intent(MainActivity.this, SplashScreenActivity.class));
+                    finish();
+                    break;
+                case R.id.nav_vip:
+                    startActivity(new Intent(MainActivity.this, VIPActivity.class));
+                    finish();
+                    break;
+                case R.id.nav_buy:
+                    startActivity(new Intent(MainActivity.this, BillingActivity.class));
                     finish();
                     break;
             }

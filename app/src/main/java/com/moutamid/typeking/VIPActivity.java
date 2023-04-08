@@ -1,34 +1,35 @@
 package com.moutamid.typeking;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.fxn.stash.Stash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.moutamid.typeking.databinding.ActivityBillingBinding;
+import com.moutamid.typeking.databinding.ActivityVipactivityBinding;
 import com.moutamid.typeking.models.UserDetails;
 import com.moutamid.typeking.utilis.Constants;
 
-public class BillingActivity extends AppCompatActivity {
-    ActivityBillingBinding binding;
+public class VIPActivity extends AppCompatActivity {
+    ActivityVipactivityBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityBillingBinding.inflate(getLayoutInflater());
+        binding = ActivityVipactivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         binding.back.setOnClickListener(v -> {
-            startActivity(new Intent(BillingActivity.this, MainActivity.class));
+            startActivity(new Intent(VIPActivity.this, MainActivity.class));
             finish();
+        });
+
+        binding.coin.setOnClickListener(v -> {
+            startActivity(new Intent(this, BillingActivity.class));
         });
 
         Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid())
@@ -44,13 +45,9 @@ public class BillingActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(BillingActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VIPActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
-
     }
-
-
-
 }

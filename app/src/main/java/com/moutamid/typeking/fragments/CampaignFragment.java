@@ -111,10 +111,8 @@ public class CampaignFragment extends Fragment {
                                 allTasksArrayList.add(tasksTypeModel);
 
                             }
-                            Collections.reverse(allTasksArrayList);
                             getSubscribeTasksList();
                         } else {
-                            Collections.reverse(allTasksArrayList);
                             getSubscribeTasksList();
                         }
                     }

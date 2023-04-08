@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Typeking"
         tools:targetApi="31">
         <activity
+            android:name=".VIPActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreateCampaignActivity"
             android:exported="false" />
         <activity
