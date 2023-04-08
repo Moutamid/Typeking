@@ -7,10 +7,8 @@ import androidx.core.view.GravityCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,12 +19,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.moutamid.typeking.constant.Constants;
+import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.ActivityMainBinding;
 import com.moutamid.typeking.fragments.MainFragment;
 import com.moutamid.typeking.models.UserDetails;
-
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

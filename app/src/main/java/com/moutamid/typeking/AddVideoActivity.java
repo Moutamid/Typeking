@@ -11,7 +11,7 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.fxn.stash.Stash;
-import com.moutamid.typeking.constant.Constants;
+import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.ActivityAddVideoBinding;
 
 public class AddVideoActivity extends AppCompatActivity {

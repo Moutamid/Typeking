@@ -30,9 +30,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.BillingActivity;
-import com.moutamid.typeking.CreateCampaignActivity;
 import com.moutamid.typeking.R;
-import com.moutamid.typeking.constant.Constants;
+import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.FragmentViewBinding;
 import com.moutamid.typeking.models.Taskk;
 import com.moutamid.typeking.models.UserDetails;
@@ -67,7 +66,6 @@ public class ViewFragment extends Fragment {
     public ViewFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -226,7 +224,6 @@ public class ViewFragment extends Fragment {
             binding.youtubePlayerViewFragmentView.wrapContent();
         }
     }
-
 
     private void setNewVideoPlayerDetails() {
         String url = getNextUrl();
@@ -405,12 +402,12 @@ public class ViewFragment extends Fragment {
                     }
                 });
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding.youtubePlayerViewFragmentView.release();
     }
-
 
     public class CustomPlayerUiController extends AbstractYouTubePlayerListener {
         private final YouTubePlayerTracker playerTracker;
@@ -481,6 +478,5 @@ public class ViewFragment extends Fragment {
         }
 
     }
-
 
 }

@@ -20,7 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.BillingActivity;
 import com.moutamid.typeking.R;
-import com.moutamid.typeking.constant.Constants;
+import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.FragmentMainBinding;
 import com.moutamid.typeking.models.UserDetails;
 

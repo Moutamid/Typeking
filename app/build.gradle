@@ -43,14 +43,16 @@ dependencies {
     implementation "com.android.billingclient:billing:$billing_version"
 
     // YOUTUBE DATA API LIBRARIES
-    /*implementation 'pub.devrel:easypermissions:0.3.0'
+    implementation 'pub.devrel:easypermissions:0.3.0'
     implementation('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
     implementation('com.google.apis:google-api-services-youtube:v3-rev183-1.22.0') {
         exclude group: 'org.apache.httpcomponents'
-    }*/
-
+    }
+   // implementation("com.google.guava:guava:31.1-android")
+//    implementation("com.google.guava:guava-jdk5:17.0")
+    implementation("com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava")
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.0.0'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'

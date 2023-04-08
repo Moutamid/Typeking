@@ -23,38 +23,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fxn.stash.Stash;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.NotNull;
-import com.moutamid.typeking.constant.Constants;
+import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.ActivityCreateCampaignBinding;
 import com.moutamid.typeking.models.LikeTaskModel;
 import com.moutamid.typeking.models.SubscribeTaskModel;
 import com.moutamid.typeking.models.UserDetails;
 import com.moutamid.typeking.models.ViewTaskModel;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.Date;
 
 public class CreateCampaignActivity extends AppCompatActivity {
     ActivityCreateCampaignBinding binding;

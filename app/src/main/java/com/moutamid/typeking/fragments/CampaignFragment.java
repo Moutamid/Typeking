@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.AddVideoActivity;
 import com.moutamid.typeking.R;
 import com.moutamid.typeking.adapter.CampaignAdapter;
-import com.moutamid.typeking.constant.Constants;
+import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.FragmentCampaignBinding;
 import com.moutamid.typeking.models.LikeTaskModel;
 import com.moutamid.typeking.models.SubscribeTaskModel;

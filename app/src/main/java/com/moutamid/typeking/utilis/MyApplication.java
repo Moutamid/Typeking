@@ -1,4 +1,4 @@
-package com.moutamid.typeking.constant;
+package com.moutamid.typeking.utilis;
 
 import android.app.Application;
 
@@ -10,5 +10,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Stash.init(this);
+       // Utils.init(this);
     }
 }
