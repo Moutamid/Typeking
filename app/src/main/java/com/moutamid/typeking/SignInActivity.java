@@ -109,7 +109,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
-                    UserDetails userDetails = new UserDetails(user.getDisplayName(), user.getEmail(), 1000, false);
+                    UserDetails userDetails = new UserDetails(user.getDisplayName(), user.getEmail(), 1000, false, user.getPhotoUrl().toString());
 
                     Constants.databaseReference().child(Constants.USER).child(user.getUid())
                             .setValue(userDetails).addOnCompleteListener(new OnCompleteListener<Void>() {

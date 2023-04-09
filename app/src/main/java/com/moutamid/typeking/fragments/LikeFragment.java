@@ -9,13 +9,16 @@ import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +27,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -65,6 +69,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.R;
 import com.moutamid.typeking.databinding.FragmentLikeBinding;
 import com.moutamid.typeking.models.LikeTaskModel;
+import com.moutamid.typeking.services.ForegroundService;
 import com.moutamid.typeking.utilis.Constants;
 
 import java.io.IOException;
@@ -300,6 +305,10 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
             currentVideoLink = likeTaskModelArrayList.get(counter).getVideoUrl();
 
             progressDialog.dismiss();
+
+            int i = Integer.parseInt(likeTaskModelArrayList.get(counter).getTotalViewTimeQuantity());
+            Stash.put(Constants.TIME, i);
+            Stash.put(Constants.COIN, currentPoints);
 
             if (isError > 0) {
                 binding.thumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -627,7 +636,19 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
                         @Override
                         public void run() {
 //                            Log.d(TAG, response.toString());
-                            uploadAddedLikers();
+                            if (checkOverlayPermission()){
+                                startService();
+                                String url = currentVideoLink;
+                                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + Constants.getVideoId(url)));
+                                Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse("http://www.youtube.com/watch?v=" + Constants.getVideoId(url)));
+
+                                try {
+                                    requireContext().startActivity(appIntent);
+                                } catch (ActivityNotFoundException ex) {
+                                    requireContext().startActivity(webIntent);
+                                }
+                            }
 //                            Toast.makeText(MainActivity.this, "Liked", Toast.LENGTH_SHORT).show();
 
                         }
@@ -731,6 +752,7 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
                                                         mProgress.hide();
                                                         Toast.makeText(requireContext(), "Liked!", Toast.LENGTH_SHORT).show();
                                                         currentCounter++;
+                                                        Stash.put(Constants.CHECK, false);
 
                                                         if (currentCounter >= likeTaskModelArrayList.size()) {
                                                             Toast.makeText(requireContext(), "End of Task!", Toast.LENGTH_SHORT).show();
@@ -753,6 +775,45 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
                         mProgress.hide();
                     }
                 });
+    }
+
+    public boolean checkOverlayPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(requireContext())) {
+                // send user to the device settings
+                Intent myIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                startActivity(myIntent);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void startService(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(Settings.canDrawOverlays(requireContext())) {
+                // start the service based on the android version
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Intent i = new Intent(requireContext(), ForegroundService.class);
+                    requireContext().startForegroundService(i);
+                } else {
+                    Intent i = new Intent(requireContext(), ForegroundService.class);
+                    requireContext().startService(i);
+                }
+            }
+        }else{
+            Intent i = new Intent(requireContext(), ForegroundService.class);
+            requireContext().startService(i);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        boolean check = Stash.getBoolean(Constants.CHECK, false);
+        if (check) {
+            uploadAddedLikers();
+        }
     }
 
 }

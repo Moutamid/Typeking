@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.fxn.stash.Stash;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.moutamid.typeking.CampaignDetailActivity;
 import com.moutamid.typeking.R;
@@ -79,6 +80,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<CampaignAdapter.Campai
         });
 
         holder.itemView.setOnClickListener(v -> {
+            Stash.put(Constants.MODEL, model);
             context.startActivity(new Intent(context, CampaignDetailActivity.class));
         });
 

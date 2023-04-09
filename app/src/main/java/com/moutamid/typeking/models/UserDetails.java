@@ -5,15 +5,24 @@ public class UserDetails {
     String email;
     int coins;
     boolean vipStatus;
-
+    String image;
     public UserDetails() {
     }
 
-    public UserDetails(String name, String email, int coins, boolean vipStatus) {
+    public UserDetails(String name, String email, int coins, boolean vipStatus, String image) {
         this.name = name;
         this.email = email;
         this.coins = coins;
         this.vipStatus = vipStatus;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getName() {

@@ -33,7 +33,9 @@ public class Constants {
     public static final int RC_SIGN_IN = 9001;
     public static final String USER = "user";
     public static final String TIME = "TIME";
+    public static final String MODEL = "MODEL";
     public static final String COIN = "COIN";
+    public static final String CHECK = "CHECK";
     public static final String SUBSCRIBER_PATH = "subscribers";
     public static final String LIKERS_PATH = "subscribers";
     public static final String CURRENT_COINS = "CURRENT_COINS";

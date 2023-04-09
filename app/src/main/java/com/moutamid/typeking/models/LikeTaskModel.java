@@ -4,12 +4,12 @@ public class LikeTaskModel {
     private String videoUrl, thumbnailUrl, posterUid, taskKey,
             totalLikesQuantity, completedDate;
     private int currentLikesQuantity;
-    private String createdTime;
+    private String createdTime, totalViewTimeQuantity;
 
     public LikeTaskModel() {
     }
 
-    public LikeTaskModel(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalLikesQuantity, String completedDate, int currentLikesQuantity, String createdTime) {
+    public LikeTaskModel(String videoUrl, String thumbnailUrl, String posterUid, String taskKey, String totalLikesQuantity, String completedDate, int currentLikesQuantity, String createdTime, String totalLikesTimeRequired) {
         this.videoUrl = videoUrl;
         this.thumbnailUrl = thumbnailUrl;
         this.posterUid = posterUid;
@@ -18,6 +18,15 @@ public class LikeTaskModel {
         this.completedDate = completedDate;
         this.currentLikesQuantity = currentLikesQuantity;
         this.createdTime = createdTime;
+        this.totalViewTimeQuantity = totalLikesTimeRequired;
+    }
+
+    public String getTotalViewTimeQuantity() {
+        return totalViewTimeQuantity;
+    }
+
+    public void setTotalViewTimeQuantity(String totalViewTimeQuantity) {
+        this.totalViewTimeQuantity = totalViewTimeQuantity;
     }
 
     public String getVideoUrl() {

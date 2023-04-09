@@ -41,9 +41,12 @@ public class Window extends ContextWrapper {
     boolean isRunning = false;
     CountDownTimer countDownTimer;
     Button back;
+    Context ctx;
 
     public Window(Context context) {
         super(context);
+
+        ctx = context;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // set the layout parameters of the window
@@ -173,11 +176,12 @@ public class Window extends ContextWrapper {
                 public void onFinish() {
                     // Perform any actions you want when the timer finishes
                     ((WindowManager) getSystemService(WINDOW_SERVICE)).removeView(iView);
-//                    iView.invalidate();
-//                    ((ViewGroup) iView.getParent()).removeView(emptyView);
-//                    ((ViewGroup) iView.getParent()).removeAllViews();
-                    success.setVisibility(View.VISIBLE);
-                    timer.setVisibility(View.GONE);
+                    Stash.put(Constants.CHECK, true);
+                    Intent intent = new Intent(ctx, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    close();
+                    stopService(new Intent(getApplicationContext(), ForegroundService.class));
                 }
             };
 

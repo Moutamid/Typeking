@@ -399,6 +399,7 @@ public class ViewFragment extends Fragment {
                                                 .setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
+                                                        Stash.put(Constants.CHECK, false);
                                                         setNewVideoPlayerDetails();
                                                     }
                                                 });
@@ -476,7 +477,7 @@ public class ViewFragment extends Fragment {
             videoDurationTextView.setText(Math.round(v)+":"+dur);
             showToastOnDifferentSec(Math.round(v));
 
-            if (Math.round(v) == 5){
+            if (Math.round(v) == 5) {
                 if (checkOverlayPermission()){
                     startService();
                     String url = taskArrayList.get(currentPosition).getVideoUrl();
@@ -490,8 +491,6 @@ public class ViewFragment extends Fragment {
                         context.startActivity(webIntent);
                     }
                 }
-
-
             }
 
         }
@@ -540,6 +539,15 @@ public class ViewFragment extends Fragment {
         }else{
             Intent i = new Intent(requireContext(), ForegroundService.class);
             requireContext().startService(i);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        boolean check = Stash.getBoolean(Constants.CHECK, false);
+        if (check) {
+            uploadAddedVideoViews();
         }
     }
 

@@ -253,6 +253,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                                             task1.setThumbnailUrl(thumbnailUrl);
                                             task1.setTotalLikesQuantity(Constants.subsQuantityArray[pickedLike]);
                                             task1.setCompletedDate("error");
+                                            task1.setTotalViewTimeQuantity(Constants.likeTimeArray[pickedLikeTime]);
                                             task1.setCurrentLikesQuantity(0);
                                             task1.setPosterUid(Constants.auth().getCurrentUser().getUid());
                                             task1.setTaskKey(key);
@@ -317,6 +318,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                                             task1.setThumbnailUrl(thumbnailUrl);
                                             task1.setTotalSubscribesQuantity(Constants.subsQuantityArray[pickedSub]);
                                             task1.setCompletedDate("error");
+                                            task1.setTotalViewTimeQuantity(Constants.subTimeArray[pickedSubTime]);
                                             task1.setCurrentSubscribesQuantity(0);
                                             task1.setPosterUid(Constants.auth().getCurrentUser().getUid());
                                             task1.setTaskKey(key);
