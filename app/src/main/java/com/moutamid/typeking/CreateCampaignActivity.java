@@ -45,17 +45,18 @@ public class CreateCampaignActivity extends AppCompatActivity {
     int CurrentCoins = 0;
     boolean VIP_STATUS = false;
     String url;
-    int totalCost = 0;
-    int subDefault = 2100;
-    int likeDefault = 1700;
+    double totalCost = 0;
+    double subDefault = 2100;
+    double likeDefault = 1700;
     int pickedSub = 0;
     int pickedView = 1;
     int pickedLike = 0;
     int pickedSubTime = 1;
-    int holderSub = 0;
+    double holderSub = 0;
     int pickedViewTime = 1;
     int pickedLikeTime = 1;
     String thumbnailUrl;
+    double discount = 0.10; // 10% discount
     GetVideoTitle getVideoTitle = new GetVideoTitle();
 
     @Override
@@ -106,6 +107,11 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
             totalCost = ((300 * pickedSubTime) + subDefault );
             holderSub = totalCost;
+
+            if (VIP_STATUS){
+                totalCost = totalCost - (totalCost * discount);
+            }
+
             binding.totalCoins.setText(totalCost+"");
 
         } else if (CAMPAIGN_SELECTION == 1){
@@ -114,6 +120,11 @@ public class CreateCampaignActivity extends AppCompatActivity {
             binding.viewsLayout.setVisibility(View.VISIBLE);
 
             totalCost = Integer.valueOf(Constants.viewQuantityArray[pickedView]) * Integer.valueOf(Constants.viewTimeArray[pickedViewTime]);
+
+            if (VIP_STATUS){
+                totalCost = totalCost - (totalCost * discount);
+            }
+
             binding.totalCoins.setText(totalCost+"");
             binding.pickerViews.setText("50");
         } else if (CAMPAIGN_SELECTION == 2){
@@ -123,6 +134,11 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
             totalCost = ((300 * pickedLikeTime) + likeDefault );
             holderSub = totalCost;
+
+            if (VIP_STATUS){
+                totalCost = totalCost - (totalCost * discount);
+            }
+
             binding.totalCoins.setText(totalCost+"");
         }
 
@@ -385,7 +401,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
             totalCost = Integer.parseInt(picked) * Integer.parseInt(Constants.viewTimeArray[pickedViewTime]);
             if (VIP_STATUS){
-                totalCost = totalCost - ((int) (totalCost * (20.0f / 100.0f)));
+                totalCost = totalCost - (totalCost * discount);
             }
             binding.totalCoins.setText(totalCost+"");
         });
@@ -455,6 +471,11 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
             dialog.dismiss();
             binding.pickerTime.setText(picked+"");
+
+            if (VIP_STATUS){
+                totalCost = totalCost - (totalCost * discount);
+            }
+
             binding.totalCoins.setText(totalCost+"");
         });
 
@@ -491,7 +512,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
             binding.pickerLikes.setText(picked+"");
             totalCost = holderSub * (pickedLike+1);
             if (VIP_STATUS){
-                totalCost = totalCost - ((int) (totalCost * (20.0f / 100.0f)));
+                totalCost = totalCost - (totalCost * discount);
             }
             binding.totalCoins.setText(totalCost+"");
         });
@@ -532,7 +553,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
             totalCost = holderSub * (pickedSub+1);
 
             if (VIP_STATUS){
-                totalCost = totalCost - ((int) (totalCost * (20.0f / 100.0f)));
+                totalCost = totalCost - (totalCost * discount);
             }
             binding.totalCoins.setText(totalCost+"");
         });

@@ -400,7 +400,9 @@ public class ViewFragment extends Fragment {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         Stash.put(Constants.CHECK, false);
-                                                        setNewVideoPlayerDetails();
+                                                        if (VIP_STATUS) {
+                                                            setNewVideoPlayerDetails();
+                                                        }
                                                     }
                                                 });
 
