@@ -93,7 +93,7 @@ public class BillingActivity extends AppCompatActivity implements BillingProcess
         dialog.setCancelable(false);
         dialog.setMessage("Please Wait...");
         dialog.show();
-        Constants.databaseReference().child(Constants.USER).child(Constants.USERID).child(Constants.coins)
+        Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid()).child(Constants.coins)
                 .setValue(coin + 4000).addOnSuccessListener(v -> {
                     dialog.dismiss();
                     Toast.makeText(this, "Thanks for buying this Package", Toast.LENGTH_SHORT).show();

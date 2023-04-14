@@ -80,7 +80,7 @@ public class VIPActivity extends AppCompatActivity implements BillingProcessor.I
         dialog.setCancelable(false);
         dialog.setMessage("Please Wait...");
         dialog.show();
-        Constants.databaseReference().child(Constants.USER).child(Constants.USERID).child(Constants.vipStatus)
+        Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid()).child(Constants.vipStatus)
                 .setValue(true).addOnSuccessListener(v -> {
                     dialog.dismiss();
                     Toast.makeText(this, "Thanks for buying this Package", Toast.LENGTH_SHORT).show();

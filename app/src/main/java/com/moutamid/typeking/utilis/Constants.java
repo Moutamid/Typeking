@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 public class Constants {
     public static final int RC_SIGN_IN = 9001;
     public static final String USER = "user";
-    public static final String USERID = auth().getCurrentUser().getUid();
     public static final String TIME = "TIME";
     public static final String MODEL = "MODEL";
     public static final String vipStatus = "vipStatus";
