@@ -39,9 +39,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.2.0'
     implementation 'com.google.firebase:firebase-database:20.1.0'
 
-    def billing_version = "5.1.0"
-    implementation "com.android.billingclient:billing:$billing_version"
-
     // YOUTUBE DATA API LIBRARIES
     implementation 'pub.devrel:easypermissions:0.3.0'
     implementation('com.google.api-client:google-api-client-android:1.22.0') {
@@ -57,6 +54,13 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+
+    def billing_version = "5.2.0"
+    implementation "com.android.billingclient:billing:$billing_version"
+
+    implementation 'androidx.preference:preference:1.2.0'
+
+    implementation 'com.anjlab.android.iab.v3:library:2.0.0'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'

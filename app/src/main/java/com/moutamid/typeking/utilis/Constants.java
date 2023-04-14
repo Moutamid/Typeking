@@ -32,8 +32,11 @@ import java.util.regex.Pattern;
 public class Constants {
     public static final int RC_SIGN_IN = 9001;
     public static final String USER = "user";
+    public static final String USERID = auth().getCurrentUser().getUid();
     public static final String TIME = "TIME";
     public static final String MODEL = "MODEL";
+    public static final String vipStatus = "vipStatus";
+    public static final String coins = "coins";
     public static final String COIN = "COIN";
     public static final String CHECK = "CHECK";
     public static final String SUBSCRIBER_PATH = "subscribers";
@@ -50,6 +53,13 @@ public class Constants {
     public static final String TYPE_VIEW = "TYPE_VIEW";
     public static final String TYPE_LIKE = "TYPE_LIKE";
     public static final String TYPE_SUBSCRIBE = "TYPE_SUBSCRIBE";
+
+    public static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApB3Pb51I49Y+CBRl92py1a00hyE7TDj0G/Iv2/mFT1enQWipoD0Jodvfv2AgipRM87hm0XJYhBV2ovYy6HWYp0tVMNT33jIa+kBJZGH9pkMJHvIkBQy+0XndSHIc95QiLC9iZddSYDGqzBcwmzyBBOwcPdBdF0G9B+mx+fz+XVTgn3mN6tk8jIFjU+M7kIOo4/E7qyFtM5tNzNOIVlxgB2mtg9siSSx8yaR11PCjHpaYxxFJd3tyEUomVV83KN7sPbTjgP008ziCx5532eCVt/8o5ZOGJaddHDuKCQEcKlgaM3zyEa9Kuk+QxHh5TqHWpNVKdeLQ6X033kd+pJqBQQIDAQAB";
+    public static final String TWO_HUNDRED_DOLLAR_PRODUCT = "two.hundred.com.moutamid.daily_dose_motivation";
+    public static final String TWO_TWENTY_FIVE_DOLLAR_PRODUCT = "two.twenty.five.com.moutamid.daily_dose_motivation";
+    public static final String TWO_FORTY_SIX_DOLLAR_PRODUCT = "two.forty.six.com.moutamid.daily_dose_motivation";
+    public static final String TWO_SIXTY_FIVE_DOLLAR_PRODUCT = "two.sixty.five.com.moutamid.daily_dose_motivation";
+    public static final String THREE_HUNDRED_DOLLAR_PRODUCT = "three.hundred.com.moutamid.motivation";
 
     public static final String[] subsQuantityArray = new String[]{
             "10", "20", "30", "40", "50", "60", "70", "80", "90", "100",

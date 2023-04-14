@@ -1,17 +1,20 @@
 package com.moutamid.typeking.fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -53,13 +56,14 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class ViewFragment extends Fragment {
     private ArrayList<Taskk> taskArrayList = new ArrayList<>();
     String videoUrl;
     boolean isAutoPlayEnabled = false;
     FragmentViewBinding binding;
-    int currentPoints = 120;
+    int currentPoints = 30;
     int currentPosition = 0;
     int CurrentCoins = 0;
     int currentVideoLength = 0;
@@ -86,8 +90,12 @@ public class ViewFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
+        Random r = new Random();
+        int low = 30;
+        int high = 210;
+        currentPoints = r.nextInt(high-low) + low;
+        binding.rewardCoins.setText(currentPoints+"");
         Stash.put(Constants.COIN, currentPoints);
-
         Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -122,10 +130,15 @@ public class ViewFragment extends Fragment {
             }
         });
 
-        binding.rewardCoins.setText("" + currentPoints);
 
         binding.seeOther.setOnClickListener(v -> {
             String url = getNextUrl();
+            Random rr = new Random();
+            int rlow = 30;
+            int rhigh = 210;
+            currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+            binding.rewardCoins.setText(currentPoints+"");
+            Stash.put(Constants.COIN, currentPoints);
             //binding.youtubePlayerViewFragmentView.release();
             youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
                 @Override
@@ -218,7 +231,12 @@ public class ViewFragment extends Fragment {
 
         youTubePlayerView.initialize(youTubePlayerListener, options);
 
-
+        Random rr = new Random();
+        int rlow = 30;
+        int rhigh = 210;
+        currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+        Stash.put(Constants.COIN, currentPoints);
+        binding.rewardCoins.setText(currentPoints+"");
         binding.seconds.setText(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
     }
 
@@ -251,7 +269,12 @@ public class ViewFragment extends Fragment {
                     );
                 }
             });
-
+            Random rr = new Random();
+            int rlow = 30;
+            int rhigh = 210;
+            currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+            binding.rewardCoins.setText(currentPoints+"");
+            Stash.put(Constants.COIN, currentPoints);
             binding.seconds.setText(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
 
             new Handler().postDelayed(new Runnable() {
@@ -422,7 +445,7 @@ public class ViewFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding.youtubePlayerViewFragmentView.release();
+        // binding.youtubePlayerViewFragmentView.release();
     }
 
     public class CustomPlayerUiController extends AbstractYouTubePlayerListener {
@@ -480,17 +503,31 @@ public class ViewFragment extends Fragment {
             showToastOnDifferentSec(Math.round(v));
 
             if (Math.round(v) == 5) {
-                if (checkOverlayPermission()){
-                    startService();
-                    String url = taskArrayList.get(currentPosition).getVideoUrl();
-                    Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + Constants.getVideoId(url)));
-                    Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://www.youtube.com/watch?v=" + Constants.getVideoId(url)));
-                    binding.youtubePlayerViewFragmentView.release();
-                    try {
-                        context.startActivity(appIntent);
-                    } catch (ActivityNotFoundException ex) {
-                        context.startActivity(webIntent);
+                boolean check = Stash.getBoolean(Constants.CHECK, false);
+                if (check){
+                    check = false;
+                    String url = getNextUrl();
+                    youTubePlayerView.getYouTubePlayerWhenReady(youTubePlayer1 -> {
+                        CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer1, youTubePlayerView);
+                        youTubePlayer1.addListener(customPlayerUiController);
+
+                        YouTubePlayerUtils.loadOrCueVideo(
+                                youTubePlayer1, getLifecycle(),
+                                Constants.getVideoId(url), 0f
+                        );
+                    });
+                } else {
+                    if (checkOverlayPermission()){
+                        startService();
+                        String url = taskArrayList.get(currentPosition).getVideoUrl();
+                        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + Constants.getVideoId(url)));
+                        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("http://www.youtube.com/watch?v=" + Constants.getVideoId(url)));
+                        try {
+                            context.startActivity(appIntent);
+                        } catch (ActivityNotFoundException ex) {
+                            context.startActivity(webIntent);
+                        }
                     }
                 }
             }
@@ -523,6 +560,15 @@ public class ViewFragment extends Fragment {
                 return false;
             }
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS);
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.POST_NOTIFICATIONS}, 1);
+                return false;
+            }
+        }
+
         return true;
     }
 

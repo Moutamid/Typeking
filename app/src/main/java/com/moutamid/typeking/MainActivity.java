@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
+                        if (snapshot.exists()) {
                             UserDetails userDetails = snapshot.getValue(UserDetails.class);
                             binding.coin.setText(userDetails.getCoins()+"");
                             Stash.put(Constants.CURRENT_COINS, userDetails.getCoins());

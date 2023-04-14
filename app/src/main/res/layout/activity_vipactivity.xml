@@ -135,7 +135,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/YearSubscription"
+        android:id="@+id/ThreeMonthSubscription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12sp"

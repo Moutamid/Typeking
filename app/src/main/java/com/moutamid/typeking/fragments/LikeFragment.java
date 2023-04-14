@@ -80,6 +80,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -104,7 +105,7 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
     ArrayList<LikeTaskModel> likeTaskModelArrayList = new ArrayList<>();
     private ProgressDialog progressDialog;
     int currentCounter = 0;
-    int currentPoints = 120;
+    int currentPoints = 30;
     boolean vipStatus = false;
     boolean isAutoPlay = false;
     boolean isTimerRunning = false;
@@ -125,6 +126,12 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
 
         vipStatus = Stash.getBoolean(Constants.VIP_STATUS, false);
 
+        Random r = new Random();
+        int low = 30;
+        int high = 210;
+
+        currentPoints = r.nextInt(high-low) + low;
+        Stash.put(Constants.COIN, currentPoints);
         Constants.databaseReference().child(Constants.LIKE_TASKS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -171,6 +178,11 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
             @Override
             public void onClick(View view) {
                 currentCounter++;
+                Random r = new Random();
+                int low = 30;
+                int high = 210;
+                currentPoints = r.nextInt(high-low) + low;
+                Stash.put(Constants.COIN, currentPoints);
                 if (currentCounter >= likeTaskModelArrayList.size()) {
                     Toast.makeText(requireContext(), "End Of Task!", Toast.LENGTH_SHORT).show();
 
@@ -753,7 +765,11 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
                                                         Toast.makeText(requireContext(), "Liked!", Toast.LENGTH_SHORT).show();
                                                         currentCounter++;
                                                         Stash.put(Constants.CHECK, false);
-
+                                                        Random rr = new Random();
+                                                        int rlow = 30;
+                                                        int rhigh = 210;
+                                                        currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+                                                        Stash.put(Constants.COIN, currentPoints);
                                                         if (currentCounter >= likeTaskModelArrayList.size()) {
                                                             Toast.makeText(requireContext(), "End of Task!", Toast.LENGTH_SHORT).show();
                                                             binding.thumbnail.setBackgroundResource(0);
