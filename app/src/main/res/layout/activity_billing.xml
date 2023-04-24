@@ -94,7 +94,10 @@
                     android:layout_height="wrap_content"
                     android:padding="12sp"
                     android:textSize="18sp"
+                    android:drawableLeft="@drawable/baseline_monetization_on_24"
                     android:text="4000 Coins"
+                    android:textColor="@color/black"
+                    android:drawablePadding="8sp"
                     android:layout_alignParentLeft="true" />
 
                 <TextView
@@ -102,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:padding="12sp"
                     android:textSize="18sp"
-                    android:text="$ 1000.00"
+                    android:text="$3.57"
                     android:layout_alignParentRight="true" />
 
             </RelativeLayout>
