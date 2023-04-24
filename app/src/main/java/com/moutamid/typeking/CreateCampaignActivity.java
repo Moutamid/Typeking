@@ -579,7 +579,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
                 String videoId = Constants.getVideoId(url);
-                youTubePlayer.loadVideo(videoId, 0);
+                youTubePlayer.cueVideo(videoId, 0);
             }
         });
 

@@ -140,10 +140,11 @@ public class ViewFragment extends Fragment {
                     CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer, youTubePlayerView);
                     youTubePlayer.addListener(customPlayerUiController);
 
-                    YouTubePlayerUtils.loadOrCueVideo(
-                            youTubePlayer, getLifecycle(),
-                            Constants.getVideoId(url), 0f
-                    );
+                    if (isAutoPlayEnabled) {
+                        youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
+                    } else {
+                        youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
+                    }
                 }
             });
             //initYoutubePlayer(url);
@@ -209,10 +210,11 @@ public class ViewFragment extends Fragment {
                 CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer, youTubePlayerView);
                 youTubePlayer.addListener(customPlayerUiController);
 
-                YouTubePlayerUtils.loadOrCueVideo(
-                        youTubePlayer, getLifecycle(),
-                        Constants.getVideoId(url), 0f
-                );
+                if (isAutoPlayEnabled) {
+                    youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
+                } else {
+                    youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
+                }
             }
         };
 
@@ -253,18 +255,24 @@ public class ViewFragment extends Fragment {
 
         if (url != null){
             //binding.youtubePlayerViewFragmentView.release();
+
+            YouTubePlayerView youTubePlayerView = binding.youtubePlayerViewFragmentView;
+            getLifecycle().addObserver(youTubePlayerView);
+
             youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
                 @Override
                 public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
                     CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer, youTubePlayerView);
                     youTubePlayer.addListener(customPlayerUiController);
-
-                    YouTubePlayerUtils.loadOrCueVideo(
-                            youTubePlayer, getLifecycle(),
-                            Constants.getVideoId(url), 0f
-                    );
+                    if (isAutoPlayEnabled) {
+                        youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
+                    } else {
+                        youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
+                    }
                 }
             });
+
+
             int rlow = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
             currentPoints = rlow / 10;
             binding.rewardCoins.setText(currentPoints+"");
@@ -418,7 +426,7 @@ public class ViewFragment extends Fragment {
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         Stash.put(Constants.CHECK, false);
                                                         progressDialog.dismiss();
-                                                        if (VIP_STATUS) {
+                                                        if (isAutoPlayEnabled) {
                                                             setNewVideoPlayerDetails();
                                                         }
                                                     }
@@ -453,7 +461,7 @@ public class ViewFragment extends Fragment {
         TextView videoDurationTextView;
         ImageView playBtn;
         private LinearProgressIndicator progressbar;
-        private boolean fullscreen = false;
+        private boolean fullscreen = false, isPlaying = false;
 
         public CustomPlayerUiController(Context context, View customPlayerUi, YouTubePlayer youTubePlayer, YouTubePlayerView youTubePlayerView) {
             this.context = context;
@@ -461,7 +469,6 @@ public class ViewFragment extends Fragment {
             this.youTubePlayerView = youTubePlayerView;
 
             playerTracker = new YouTubePlayerTracker();
-            youTubePlayer.addListener(playerTracker);
 
             initViews(customPlayerUi);
         }
@@ -471,11 +478,25 @@ public class ViewFragment extends Fragment {
             progressbar = playerUi.findViewById(R.id.progressbar);
             playBtn = playerUi.findViewById(R.id.playBtn);
             videoDurationTextView = playerUi.findViewById(R.id.videoDurationTextView);
+
+            playBtn.setOnClickListener(v -> {
+                youTubePlayer.addListener(playerTracker);
+                if (isPlaying) {
+                    youTubePlayer.pause();
+                    isPlaying = false;
+                    playBtn.setImageResource(R.drawable.round_play_arrow_24);
+                } else {
+                    isPlaying = true;
+                    playBtn.setImageResource(R.drawable.round_pause_circle_24);
+                    youTubePlayer.play();
+                }
+
+            });
+
         }
 
         @Override
         public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-
             //progressbar.setVisibility(View.GONE);
         }
 
@@ -509,10 +530,17 @@ public class ViewFragment extends Fragment {
                             CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer1, youTubePlayerView);
                             youTubePlayer1.addListener(customPlayerUiController);
 
-                            YouTubePlayerUtils.loadOrCueVideo(
-                                    youTubePlayer1, getLifecycle(),
-                                    Constants.getVideoId(url), 0f
-                            );
+                            if (isAutoPlayEnabled) {
+                                youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
+                            } else {
+                                youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
+                            }
+
+//                            YouTubePlayerUtils.loadOrCueVideo(
+//                                    youTubePlayer1, getLifecycle(),
+//                                    Constants.getVideoId(url), 0f
+//                            );
+
                         });
                     } else {
                         setNewVideoPlayerDetails();
@@ -603,7 +631,7 @@ public class ViewFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        binding.youtubePlayerViewFragmentView.release();
+       // binding.youtubePlayerViewFragmentView.release();
     }
 
     @Override
