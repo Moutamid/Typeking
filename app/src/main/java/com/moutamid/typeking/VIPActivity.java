@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -27,11 +28,20 @@ public class VIPActivity extends AppCompatActivity implements BillingProcessor.I
         super.onCreate(savedInstanceState);
         binding = ActivityVipactivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Constants.calledIniti(this);
         BillingProcessor bp;
 
         bp = BillingProcessor.newBillingProcessor(this, Constants.LICENSE_KEY, this);
         bp.initialize();
+
+        if (!Stash.getBoolean(Constants.VIP_STATUS)){
+            Constants.loadIntersAD(VIPActivity.this, VIPActivity.this);
+            Constants.showNativeAd(VIPActivity.this, binding.myTemplate);
+            Constants.showBannerAd(binding.adView);
+        } else {
+            binding.myTemplate.setVisibility(View.GONE);
+            binding.adView.setVisibility(View.GONE);
+        }
 
         binding.monthSubscription.setOnClickListener(v -> {
             VipUpdate();

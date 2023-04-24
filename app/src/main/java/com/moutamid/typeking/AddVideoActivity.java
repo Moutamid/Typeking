@@ -21,9 +21,19 @@ public class AddVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAddVideoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Constants.calledIniti(this);
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        if (!Stash.getBoolean(Constants.VIP_STATUS)){
+            Constants.loadIntersAD(AddVideoActivity.this, AddVideoActivity.this);
+            Constants.showNativeAd(AddVideoActivity.this, binding.myTemplate);
+            Constants.showBannerAd(binding.adView);
+        } else {
+            binding.myTemplate.setVisibility(View.GONE);
+            binding.adView.setVisibility(View.GONE);
+        }
 
         binding.button.setOnClickListener(v -> {
             if (valid()){

@@ -35,9 +35,12 @@ android {
 dependencies {
     implementation 'com.fxn769:stash:1.3.2'
 
+    implementation project(':nativetemplates')
+
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
     implementation 'com.google.firebase:firebase-auth:21.2.0'
     implementation 'com.google.firebase:firebase-database:20.1.0'
+    implementation 'com.google.android.gms:play-services-ads:22.0.0'
 
     // YOUTUBE DATA API LIBRARIES
     implementation 'pub.devrel:easypermissions:0.3.0'

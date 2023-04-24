@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Constants.checkApp(this);
+        Constants.calledIniti(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
@@ -61,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
                             UserDetails userDetails = snapshot.getValue(UserDetails.class);
                             binding.coin.setText(userDetails.getCoins()+"");
                             Stash.put(Constants.CURRENT_COINS, userDetails.getCoins());
+                            if (!userDetails.isVipStatus()){
+                                Constants.loadIntersAD(MainActivity.this, MainActivity.this);
+                            }
+                            Stash.put(Constants.VIP_STATUS, userDetails.isVipStatus());
                         }
                     }
 

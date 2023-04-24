@@ -138,11 +138,7 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
 
         vipStatus = Stash.getBoolean(Constants.VIP_STATUS, false);
 
-        Random r = new Random();
-        int low = 30;
-        int high = 210;
-        currentPoints = r.nextInt(high-low) + low;
-        Stash.put(Constants.COIN, currentPoints);
+
         Constants.databaseReference().child(Constants.SUBSCRIBE_TASKS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -157,6 +153,13 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
                             subscribeTaskModelArrayList.add(model);
                         }
                     }
+
+                    if (subscribeTaskModelArrayList.size()>0){
+                        int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                        currentPoints = rlow / 10;
+                        Stash.put(Constants.COIN, currentPoints);
+                    }
+
                     progressDialog.dismiss();
                     setDataOnViews(0, false);
                 } else {
@@ -175,15 +178,16 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
 
         b.seeOther.setOnClickListener(view -> {
             currentCounter++;
-            Random rr = new Random();
-            int rlow = 30;
-            int rhigh = 210;
-            currentPoints = rr.nextInt(rhigh-rlow) + rlow;
-            Stash.put(Constants.COIN, currentPoints);
+
             if (currentCounter >= subscribeTaskModelArrayList.size()) {
                 Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();
 
-            } else setDataOnViews(currentCounter, false);
+            } else{
+                int rloww = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                currentPoints = rloww / 10;
+                Stash.put(Constants.COIN, currentPoints);
+                setDataOnViews(currentCounter, false);
+            }
 
         });
 
@@ -566,6 +570,7 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
+                        progressDialog.dismiss();
                         Log.d(TAG, "onCancelled: " + error.getMessage());
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         mProgress.hide();
@@ -597,15 +602,13 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
                                                 .setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-
+                                                        progressDialog.dismiss();
                                                         mProgress.hide();
                                                         Toast.makeText(requireContext(), "Subscribed Done", Toast.LENGTH_SHORT).show();
                                                         Stash.put(Constants.CHECK, false);
                                                         currentCounter++;
-                                                        Random rr = new Random();
-                                                        int rlow = 30;
-                                                        int rhigh = 210;
-                                                        currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+                                                        int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                                                        currentPoints = rlow / 10;
                                                         Stash.put(Constants.COIN, currentPoints);
                                                         if (currentCounter >= subscribeTaskModelArrayList.size()) {
                                                             Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();
@@ -623,6 +626,7 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.d(TAG, "onCancelled: " + error.getMessage());
+                        progressDialog.dismiss();
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         mProgress.hide();
                     }
@@ -768,10 +772,8 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
                                         b.videoImageSubscribe.setImageResource(R.drawable.ic_baseline_access_time_filled_24);
 
                                         currentCounter++;
-                                        Random rr = new Random();
-                                        int rlow = 30;
-                                        int rhigh = 210;
-                                        currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+                                        int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                                        currentPoints = rlow / 10;
                                         Stash.put(Constants.COIN, currentPoints);
                                         if (currentCounter >= subscribeTaskModelArrayList.size()) {
                                             Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();

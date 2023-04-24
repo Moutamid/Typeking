@@ -54,6 +54,9 @@ public class MainFragment extends Fragment {
                             UserDetails userDetails = snapshot.getValue(UserDetails.class);
                             if (userDetails.isVipStatus()){
                                 binding.promotion.setVisibility(View.GONE);
+                                binding.adView.setVisibility(View.GONE);
+                            } else {
+                                Constants.showBannerAd(binding.adView);
                             }
                             Stash.put(Constants.VIP_STATUS, userDetails.isVipStatus());
                         }

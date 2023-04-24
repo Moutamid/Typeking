@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -33,7 +34,7 @@ public class BillingActivity extends AppCompatActivity implements BillingProcess
         super.onCreate(savedInstanceState);
         binding = ActivityBillingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Constants.calledIniti(this);
         bp = BillingProcessor.newBillingProcessor(this, Constants.LICENSE_KEY, this);
         bp.initialize();
 
@@ -41,6 +42,15 @@ public class BillingActivity extends AppCompatActivity implements BillingProcess
             startActivity(new Intent(BillingActivity.this, MainActivity.class));
             finish();
         });
+
+        if (!Stash.getBoolean(Constants.VIP_STATUS)){
+            Constants.loadIntersAD(BillingActivity.this, BillingActivity.this);
+            Constants.showNativeAd(BillingActivity.this, binding.myTemplate);
+            Constants.showBannerAd(binding.adView);
+        } else {
+            binding.myTemplate.setVisibility(View.GONE);
+            binding.adView.setVisibility(View.GONE);
+        }
 
         binding.coin4000.setOnClickListener(v -> {
             buyCoin();

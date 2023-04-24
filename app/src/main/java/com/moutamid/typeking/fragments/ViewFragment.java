@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,12 +91,7 @@ public class ViewFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        Random r = new Random();
-        int low = 30;
-        int high = 210;
-        currentPoints = r.nextInt(high-low) + low;
-        binding.rewardCoins.setText(currentPoints+"");
-        Stash.put(Constants.COIN, currentPoints);
+
         Constants.databaseReference().child("user").child(Constants.auth().getCurrentUser().getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -133,10 +129,8 @@ public class ViewFragment extends Fragment {
 
         binding.seeOther.setOnClickListener(v -> {
             String url = getNextUrl();
-            Random rr = new Random();
-            int rlow = 30;
-            int rhigh = 210;
-            currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+            int rloww = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
+            currentPoints = rloww / 10;
             binding.rewardCoins.setText(currentPoints+"");
             Stash.put(Constants.COIN, currentPoints);
             //binding.youtubePlayerViewFragmentView.release();
@@ -181,6 +175,10 @@ public class ViewFragment extends Fragment {
                     if (taskArrayList.size() > 0) {
                         videoUrl = taskArrayList.get(0).getVideoUrl();
                         initYoutubePlayer(videoUrl);
+                        int rlow = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
+                        currentPoints = rlow / 10;
+                        binding.rewardCoins.setText(currentPoints+"");
+                        Stash.put(Constants.COIN, currentPoints);
                     } else {
                         Toast.makeText(requireContext(), "No video Found", Toast.LENGTH_SHORT).show();
                     }
@@ -231,10 +229,8 @@ public class ViewFragment extends Fragment {
 
         youTubePlayerView.initialize(youTubePlayerListener, options);
 
-        Random rr = new Random();
-        int rlow = 30;
-        int rhigh = 210;
-        currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+        int rlow = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
+        currentPoints = rlow / 10;
         Stash.put(Constants.COIN, currentPoints);
         binding.rewardCoins.setText(currentPoints+"");
         binding.seconds.setText(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
@@ -269,10 +265,8 @@ public class ViewFragment extends Fragment {
                     );
                 }
             });
-            Random rr = new Random();
-            int rlow = 30;
-            int rhigh = 210;
-            currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+            int rlow = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
+            currentPoints = rlow / 10;
             binding.rewardCoins.setText(currentPoints+"");
             Stash.put(Constants.COIN, currentPoints);
             binding.seconds.setText(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
@@ -423,6 +417,7 @@ public class ViewFragment extends Fragment {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         Stash.put(Constants.CHECK, false);
+                                                        progressDialog.dismiss();
                                                         if (VIP_STATUS) {
                                                             setNewVideoPlayerDetails();
                                                         }
@@ -456,6 +451,7 @@ public class ViewFragment extends Fragment {
         // panel is used to intercept clicks on the WebView, I don't want the user to be able to click the WebView directly.
         private View panel;
         TextView videoDurationTextView;
+        ImageView playBtn;
         private LinearProgressIndicator progressbar;
         private boolean fullscreen = false;
 
@@ -473,6 +469,7 @@ public class ViewFragment extends Fragment {
         private void initViews(View playerUi) {
             panel = playerUi.findViewById(R.id.panel);
             progressbar = playerUi.findViewById(R.id.progressbar);
+            playBtn = playerUi.findViewById(R.id.playBtn);
             videoDurationTextView = playerUi.findViewById(R.id.videoDurationTextView);
         }
 
@@ -504,18 +501,22 @@ public class ViewFragment extends Fragment {
 
             if (Math.round(v) == 5) {
                 boolean check = Stash.getBoolean(Constants.CHECK, false);
-                if (check){
+                if (check) {
                     check = false;
-                    String url = getNextUrl();
-                    youTubePlayerView.getYouTubePlayerWhenReady(youTubePlayer1 -> {
-                        CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer1, youTubePlayerView);
-                        youTubePlayer1.addListener(customPlayerUiController);
+                    if (isAutoPlayEnabled) {
+                        String url = getNextUrl();
+                        youTubePlayerView.getYouTubePlayerWhenReady(youTubePlayer1 -> {
+                            CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer1, youTubePlayerView);
+                            youTubePlayer1.addListener(customPlayerUiController);
 
-                        YouTubePlayerUtils.loadOrCueVideo(
-                                youTubePlayer1, getLifecycle(),
-                                Constants.getVideoId(url), 0f
-                        );
-                    });
+                            YouTubePlayerUtils.loadOrCueVideo(
+                                    youTubePlayer1, getLifecycle(),
+                                    Constants.getVideoId(url), 0f
+                            );
+                        });
+                    } else {
+                        setNewVideoPlayerDetails();
+                    }
                 } else {
                     if (checkOverlayPermission()){
                         startService();

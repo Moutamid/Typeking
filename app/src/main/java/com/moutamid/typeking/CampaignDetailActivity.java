@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -44,6 +45,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCampaignDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Constants.calledIniti(this);
         setSupportActionBar(binding.toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -51,6 +53,13 @@ public class CampaignDetailActivity extends AppCompatActivity {
         list = new ArrayList<>();
         users = new ArrayList<>();
         model = (TasksTypeModel) Stash.getObject(Constants.MODEL, TasksTypeModel.class);
+
+        if (!Stash.getBoolean(Constants.VIP_STATUS)){
+            Constants.loadIntersAD(CampaignDetailActivity.this, CampaignDetailActivity.this);
+            Constants.showBannerAd(binding.adView);
+        } else {
+            binding.adView.setVisibility(View.GONE);
+        }
 
         binding.recycler.setLayoutManager(new LinearLayoutManager(this));
         binding.recycler.setHasFixedSize(false);

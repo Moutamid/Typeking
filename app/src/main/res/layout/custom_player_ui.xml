@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <View
         android:id="@+id/panel"
@@ -11,6 +11,14 @@
         android:clickable="true"
         android:focusable="true"
         android:background="@android:color/black" />
+
+    <ImageView
+        android:id="@+id/playBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/round_play_arrow_24"
+        android:layout_centerInParent="true"
+        app:tint="@color/white" />
 
     <TextView
         android:id="@+id/videoDurationTextView"

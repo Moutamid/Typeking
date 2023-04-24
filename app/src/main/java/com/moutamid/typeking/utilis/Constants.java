@@ -1,6 +1,9 @@
 package com.moutamid.typeking.utilis;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
@@ -8,9 +11,23 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.ads.nativetemplates.NativeTemplateStyle;
+import com.google.android.ads.nativetemplates.TemplateView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.nativead.NativeAd;
+import com.google.android.gms.ads.nativead.NativeAdOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+
 import com.google.firebase.database.FirebaseDatabase;
+import com.moutamid.typeking.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +69,9 @@ public class Constants {
     public static final String TYPE_VIEW = "TYPE_VIEW";
     public static final String TYPE_LIKE = "TYPE_LIKE";
     public static final String TYPE_SUBSCRIBE = "TYPE_SUBSCRIBE";
+
+    private static InterstitialAd mInterstitialAd;
+    public static AdRequest adRequest = new AdRequest.Builder().build();
 
     public static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApB3Pb51I49Y+CBRl92py1a00hyE7TDj0G/Iv2/mFT1enQWipoD0Jodvfv2AgipRM87hm0XJYhBV2ovYy6HWYp0tVMNT33jIa+kBJZGH9pkMJHvIkBQy+0XndSHIc95QiLC9iZddSYDGqzBcwmzyBBOwcPdBdF0G9B+mx+fz+XVTgn3mN6tk8jIFjU+M7kIOo4/E7qyFtM5tNzNOIVlxgB2mtg9siSSx8yaR11PCjHpaYxxFJd3tyEUomVV83KN7sPbTjgP008ziCx5532eCVt/8o5ZOGJaddHDuKCQEcKlgaM3zyEa9Kuk+QxHh5TqHWpNVKdeLQ6X033kd+pJqBQQIDAQAB";
     public static final String TWO_HUNDRED_DOLLAR_PRODUCT = "two.hundred.com.moutamid.daily_dose_motivation";
@@ -237,6 +257,65 @@ public class Constants {
 
         return "Error";
 
+    }
+
+    public static void calledIniti(Context context){
+        MobileAds.initialize(context, initializationStatus -> {});
+    }
+
+    public static void showBannerAd(AdView mAdView){
+        mAdView.loadAd(adRequest);
+    }
+
+    public static void loadIntersAD(Context context, Activity activity){
+        InterstitialAd.load(context, context.getString(R.string.Interstial_ID), adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        // The mInterstitialAd reference will be null until
+                        // an ad is loaded.
+                        mInterstitialAd = interstitialAd;
+                        Log.i(TAG, "onAdLoaded");
+                        if (mInterstitialAd != null) {
+                            mInterstitialAd.show(activity);
+                        } else {
+                            Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                        }
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error
+                        Log.d(TAG, loadAdError.toString());
+                        mInterstitialAd = null;
+                    }
+                });
+    }
+
+    public static void showNativeAd(Context context, TemplateView myTemplate) {
+        AdLoader adLoader = new AdLoader.Builder(context, context.getString(R.string.Native_ID))
+                .forNativeAd(new NativeAd.OnNativeAdLoadedListener() {
+                    @Override
+                    public void onNativeAdLoaded(NativeAd nativeAd) {
+                        NativeTemplateStyle styles = new NativeTemplateStyle.Builder().build();
+                        TemplateView template = myTemplate;
+                        template.setStyles(styles);
+                        template.setNativeAd(nativeAd);
+                    }
+                })
+                .withAdListener(new AdListener() {
+                    @Override
+                    public void onAdFailedToLoad(LoadAdError adError) {
+                        // Handle the failure by logging, altering the UI, and so on.
+                    }
+                })
+                .withNativeAdOptions(new NativeAdOptions.Builder()
+                        // Methods in the NativeAdOptions.Builder class can be
+                        // used here to specify individual options settings.
+                        .build())
+                .build();
+
+        adLoader.loadAd(adRequest);
     }
 
 }

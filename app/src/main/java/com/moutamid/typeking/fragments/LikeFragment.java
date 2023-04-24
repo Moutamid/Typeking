@@ -126,12 +126,7 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
 
         vipStatus = Stash.getBoolean(Constants.VIP_STATUS, false);
 
-        Random r = new Random();
-        int low = 30;
-        int high = 210;
 
-        currentPoints = r.nextInt(high-low) + low;
-        Stash.put(Constants.COIN, currentPoints);
         Constants.databaseReference().child(Constants.LIKE_TASKS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -149,6 +144,11 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
                         }
 
 
+                    }
+                    if (likeTaskModelArrayList.size()>0){
+                        int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                        currentPoints = rlow / 10;
+                        Stash.put(Constants.COIN, currentPoints);
                     }
                     progressDialog.dismiss();
                     setDataOnViews(0, false);
@@ -178,15 +178,15 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
             @Override
             public void onClick(View view) {
                 currentCounter++;
-                Random r = new Random();
-                int low = 30;
-                int high = 210;
-                currentPoints = r.nextInt(high-low) + low;
-                Stash.put(Constants.COIN, currentPoints);
-                if (currentCounter >= likeTaskModelArrayList.size()) {
-                    Toast.makeText(requireContext(), "End Of Task!", Toast.LENGTH_SHORT).show();
 
-                } else setDataOnViews(currentCounter, false);
+                if (currentCounter >= likeTaskModelArrayList.size()) {
+                } else{
+                    setDataOnViews(currentCounter, false);
+                    Toast.makeText(requireContext(), "End Of Task!", Toast.LENGTH_SHORT).show();
+                    int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                    currentPoints = rlow / 10;
+                    Stash.put(Constants.COIN, currentPoints);
+                }
 
             }
         });
@@ -760,15 +760,13 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
                                                 .setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-
+                                                        progressDialog.dismiss();
                                                         mProgress.hide();
                                                         Toast.makeText(requireContext(), "Liked!", Toast.LENGTH_SHORT).show();
                                                         currentCounter++;
                                                         Stash.put(Constants.CHECK, false);
-                                                        Random rr = new Random();
-                                                        int rlow = 30;
-                                                        int rhigh = 210;
-                                                        currentPoints = rr.nextInt(rhigh-rlow) + rlow;
+                                                        int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                                                        currentPoints = rlow / 10;
                                                         Stash.put(Constants.COIN, currentPoints);
                                                         if (currentCounter >= likeTaskModelArrayList.size()) {
                                                             Toast.makeText(requireContext(), "End of Task!", Toast.LENGTH_SHORT).show();

@@ -77,6 +77,12 @@ public class CreateCampaignActivity extends AppCompatActivity {
                             UserDetails userDetails = snapshot.getValue(UserDetails.class);
                             CurrentCoins = userDetails.getCoins();
                             VIP_STATUS = userDetails.isVipStatus();
+                            if (!userDetails.isVipStatus()){
+                                Constants.loadIntersAD(CreateCampaignActivity.this, CreateCampaignActivity.this);
+                                Constants.showBannerAd(binding.adView);
+                            } else {
+                                binding.adView.setVisibility(View.GONE);
+                            }
                             binding.coin.setText(userDetails.getCoins()+"");
                             Stash.put(Constants.CURRENT_COINS, userDetails.getCoins());
                         }
@@ -108,11 +114,11 @@ public class CreateCampaignActivity extends AppCompatActivity {
             totalCost = ((300 * pickedSubTime) + subDefault );
             holderSub = totalCost;
 
-            if (VIP_STATUS){
+            if (VIP_STATUS) {
                 totalCost = totalCost - (totalCost * discount);
             }
 
-            binding.totalCoins.setText(totalCost+"");
+            binding.totalCoins.setText("$"+totalCost);
 
         } else if (CAMPAIGN_SELECTION == 1){
             binding.allLayout.setVisibility(View.GONE);
@@ -125,7 +131,8 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 totalCost = totalCost - (totalCost * discount);
             }
 
-            binding.totalCoins.setText(totalCost+"");
+            binding.totalCoins.setText("$"+totalCost);
+
             binding.pickerViews.setText("50");
         } else if (CAMPAIGN_SELECTION == 2){
             binding.allLayout.setVisibility(View.GONE);
@@ -139,7 +146,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 totalCost = totalCost - (totalCost * discount);
             }
 
-            binding.totalCoins.setText(totalCost+"");
+            binding.totalCoins.setText("$"+totalCost);
         }
 
         binding.pickerSubAll.setOnClickListener(v -> {
@@ -403,7 +410,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
             if (VIP_STATUS){
                 totalCost = totalCost - (totalCost * discount);
             }
-            binding.totalCoins.setText(totalCost+"");
+            binding.totalCoins.setText("$"+totalCost);
         });
 
         dialog.show();
@@ -476,7 +483,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 totalCost = totalCost - (totalCost * discount);
             }
 
-            binding.totalCoins.setText(totalCost+"");
+            binding.totalCoins.setText("$"+totalCost);
         });
 
         dialog.show();
@@ -514,7 +521,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
             if (VIP_STATUS){
                 totalCost = totalCost - (totalCost * discount);
             }
-            binding.totalCoins.setText(totalCost+"");
+            binding.totalCoins.setText("$"+totalCost);
         });
 
         dialog.show();
@@ -555,7 +562,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
             if (VIP_STATUS){
                 totalCost = totalCost - (totalCost * discount);
             }
-            binding.totalCoins.setText(totalCost+"");
+            binding.totalCoins.setText("$"+totalCost);
         });
 
         dialog.show();
