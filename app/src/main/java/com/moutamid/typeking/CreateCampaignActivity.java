@@ -118,7 +118,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 totalCost = totalCost - (totalCost * discount);
             }
 
-            binding.totalCoins.setText("$"+totalCost);
+            binding.totalCoins.setText(""+totalCost);
 
         } else if (CAMPAIGN_SELECTION == 1){
             binding.allLayout.setVisibility(View.GONE);
@@ -131,7 +131,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 totalCost = totalCost - (totalCost * discount);
             }
 
-            binding.totalCoins.setText("$"+totalCost);
+            binding.totalCoins.setText(""+totalCost);
 
             binding.pickerViews.setText("50");
         } else if (CAMPAIGN_SELECTION == 2){
@@ -146,7 +146,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 totalCost = totalCost - (totalCost * discount);
             }
 
-            binding.totalCoins.setText("$"+totalCost);
+            binding.totalCoins.setText(""+totalCost);
         }
 
         binding.pickerSubAll.setOnClickListener(v -> {
@@ -410,7 +410,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
             if (VIP_STATUS){
                 totalCost = totalCost - (totalCost * discount);
             }
-            binding.totalCoins.setText("$"+totalCost);
+            binding.totalCoins.setText(""+totalCost);
         });
 
         dialog.show();
@@ -483,7 +483,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                 totalCost = totalCost - (totalCost * discount);
             }
 
-            binding.totalCoins.setText("$"+totalCost);
+            binding.totalCoins.setText(""+totalCost);
         });
 
         dialog.show();
@@ -521,7 +521,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
             if (VIP_STATUS){
                 totalCost = totalCost - (totalCost * discount);
             }
-            binding.totalCoins.setText("$"+totalCost);
+            binding.totalCoins.setText(""+totalCost);
         });
 
         dialog.show();
@@ -562,7 +562,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
             if (VIP_STATUS){
                 totalCost = totalCost - (totalCost * discount);
             }
-            binding.totalCoins.setText("$"+totalCost);
+            binding.totalCoins.setText(""+totalCost);
         });
 
         dialog.show();
