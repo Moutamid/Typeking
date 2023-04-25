@@ -53,7 +53,19 @@ public class BillingActivity extends AppCompatActivity implements BillingProcess
         }
 
         binding.coin4000.setOnClickListener(v -> {
-            buyCoin();
+            buyCoin(4000);
+        });
+        binding.coin25000.setOnClickListener(v -> {
+            buyCoin(25000);
+        });
+        binding.coin60000.setOnClickListener(v -> {
+            buyCoin(60000);
+        });
+        binding.coin400k.setOnClickListener(v -> {
+            buyCoin(400000);
+        });
+        binding.coin100k.setOnClickListener(v -> {
+            buyCoin(1000000);
         });
 
         Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid())
@@ -73,7 +85,6 @@ public class BillingActivity extends AppCompatActivity implements BillingProcess
                         Toast.makeText(BillingActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
 
     }
 
@@ -98,13 +109,13 @@ public class BillingActivity extends AppCompatActivity implements BillingProcess
 
     }
 
-    private void buyCoin() {
+    private void buyCoin(int price) {
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
         dialog.setMessage("Please Wait...");
         dialog.show();
         Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid()).child(Constants.coins)
-                .setValue(coin + 4000).addOnSuccessListener(v -> {
+                .setValue(coin + price).addOnSuccessListener(v -> {
                     dialog.dismiss();
                     Toast.makeText(this, "Thanks for buying this Package", Toast.LENGTH_SHORT).show();
                 }).addOnFailureListener(e -> {
