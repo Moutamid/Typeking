@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.BillingActivity;
 import com.moutamid.typeking.R;
+import com.moutamid.typeking.test.LikedFragment;
 import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.FragmentMainBinding;
 import com.moutamid.typeking.models.UserDetails;
@@ -92,7 +93,7 @@ public class MainFragment extends Fragment {
                     getChildFragmentManager().beginTransaction().replace(R.id.framelayout, new SubscribeFragment()).commit();
                     break;
                 case R.id.nav_like:
-                    getChildFragmentManager().beginTransaction().replace(R.id.framelayout, new LikeFragment()).commit();
+                    getChildFragmentManager().beginTransaction().replace(R.id.framelayout, new LikedFragment()).commit();
                     break;
                 case R.id.nav_campaign:
                     getChildFragmentManager().beginTransaction().replace(R.id.framelayout, new CampaignFragment()).commit();

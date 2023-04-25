@@ -11,8 +11,9 @@
     <string name="campaign_message">Your campaign appear here. Click add button to create campaign to get subscribers for your channel</string>
 
 
-    <string name="web_client_id" translatable="false">890062472575-miorkevdhgsr795467k3gh5ehqoi0tge.apps.googleusercontent.com</string>
+    <string name="client_id" translatable="false">890062472575-miorkevdhgsr795467k3gh5ehqoi0tge.apps.googleusercontent.com</string>
     <string name="defaultSenderId" translatable="false">890062472575</string>
+    <string name="youtube_api_key" translatable="false">AIzaSyBcgg_QpZ2O60W4UhMd28XbBclcQb8oCR4</string>
 
     <string name="Interstial_ID">ca-app-pub-3940256099942544/1033173712</string>
     <string name="Banner_ID">ca-app-pub-3940256099942544/6300978111</string>
