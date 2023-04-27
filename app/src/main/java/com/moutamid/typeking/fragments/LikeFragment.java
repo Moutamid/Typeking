@@ -87,7 +87,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 
 public class LikeFragment extends Fragment implements EasyPermissions.PermissionCallbacks{
-
+    // TODO: OLD FILE
     FragmentLikeBinding binding;
     private static final String TAG = "LikeFragment";
     static final int REQUEST_ACCOUNT_PICKER = 1000;
@@ -180,12 +180,12 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
                 currentCounter++;
 
                 if (currentCounter >= likeTaskModelArrayList.size()) {
-                } else{
-                    setDataOnViews(currentCounter, false);
                     Toast.makeText(requireContext(), "End Of Task!", Toast.LENGTH_SHORT).show();
+                } else{
                     int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
                     currentPoints = rlow / 10;
                     Stash.put(Constants.COIN, currentPoints);
+                    setDataOnViews(currentCounter, false);
                 }
 
             }
@@ -247,7 +247,6 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
-
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
@@ -415,17 +414,6 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
 
     private void likeUserToVideo() {
 
-//        if (vipStatus) {
-////            if (remainingDailyLimitInt == 80) {
-////                Utils.toast(getString(R.string.yourdailylimitreached));
-////                return;
-////            }
-//        } else {
-//            if (remainingDailyLimitInt == 30) {
-//                //Utils.toast(getString(R.string.yourdailylimitreached));
-//                return;
-//            }
-//        }
 
         if (likeTaskModelArrayList.size() == 0)
             return;
@@ -467,8 +455,7 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
         }
     }
 
-    void showGooglePlayServicesAvailabilityErrorDialog(
-            final int connectionStatusCode) {
+    void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         Dialog dialog = apiAvailability.getErrorDialog(
                 requireActivity(),
@@ -792,32 +779,24 @@ public class LikeFragment extends Fragment implements EasyPermissions.Permission
     }
 
     public boolean checkOverlayPermission(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(requireContext())) {
-                // send user to the device settings
-                Intent myIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                startActivity(myIntent);
-                return false;
-            }
+        if (!Settings.canDrawOverlays(requireContext())) {
+            // send user to the device settings
+            Intent myIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+            startActivity(myIntent);
+            return false;
         }
         return true;
     }
 
     public void startService(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(Settings.canDrawOverlays(requireContext())) {
-                // start the service based on the android version
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Intent i = new Intent(requireContext(), ForegroundService.class);
-                    requireContext().startForegroundService(i);
-                } else {
-                    Intent i = new Intent(requireContext(), ForegroundService.class);
-                    requireContext().startService(i);
-                }
-            }
-        }else{
+        if(Settings.canDrawOverlays(requireContext())) {
+            // start the service based on the android version
             Intent i = new Intent(requireContext(), ForegroundService.class);
-            requireContext().startService(i);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                requireContext().startForegroundService(i);
+            } else {
+                requireContext().startService(i);
+            }
         }
     }
 

@@ -61,7 +61,7 @@ public class Window extends ContextWrapper {
                             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     // through any transparent parts
                     PixelFormat.TRANSLUCENT);
-        }else {
+        } else {
             mParams = new WindowManager.LayoutParams(
                     // Shrink the window to wrap the content rather
                     // than filling the screen
@@ -89,7 +89,7 @@ public class Window extends ContextWrapper {
                             WindowManager.LayoutParams.FLAG_FULLSCREEN |
                             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
-        }else {
+        } else {
             mParamsB = new WindowManager.LayoutParams(
                     // Shrink the window to wrap the content rather
                     // than filling the screen
@@ -117,34 +117,35 @@ public class Window extends ContextWrapper {
         emptyView = iView.findViewById(R.id.view2);
 
         cc = Stash.getInt(Constants.COIN);
-        coin.setText(cc+"");
+        coin.setText(cc + "");
 
         tt = Stash.getInt(Constants.TIME);
-        time.setText(tt+"");
+        time.setText(tt + "");
 
         emptyView.setOnClickListener(v -> {
             Toast.makeText(context, "Please finish watching the video before like to this video", Toast.LENGTH_SHORT).show();
         });
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Stash.put(Constants.CHECK, true);
+            Intent intent = new Intent(ctx, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             close();
             stopService(new Intent(getApplicationContext(), ForegroundService.class));
         });
 
         mParams.gravity = Gravity.BOTTOM;
-        mWindowManager = (WindowManager)context.getSystemService(WINDOW_SERVICE);
+        mWindowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
 
         mParamsB.gravity = Gravity.CENTER;
-        mWindowManagerB = (WindowManager)context.getSystemService(WINDOW_SERVICE);
+        mWindowManagerB = (WindowManager) context.getSystemService(WINDOW_SERVICE);
     }
 
     public void open() {
         try {
-            if(mView.getWindowToken()==null && iView.getWindowToken()==null) {
-                if(mView.getParent()==null && iView.getParent()==null) {
+            if (mView.getWindowToken() == null && iView.getWindowToken() == null) {
+                if (mView.getParent() == null && iView.getParent() == null) {
                     mWindowManager.addView(mView, mParams);
                     mWindowManagerB.addView(iView, mParamsB);
                     Log.d("ServiceTi", "Open");
@@ -152,7 +153,7 @@ public class Window extends ContextWrapper {
                 }
             }
         } catch (Exception e) {
-            Log.d("Error1",e.toString());
+            Log.d("Error1", e.toString());
         }
 
     }
@@ -163,25 +164,21 @@ public class Window extends ContextWrapper {
             Log.d("ServiceTi", "handler");
             isRunning = true;
 
-            countDownTimer = new CountDownTimer((tt*1000), 1000) {
+            countDownTimer = new CountDownTimer((tt * 1000), 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     // Update the TextView with the remaining time
                     int secondsLeft = (int) (millisUntilFinished / 1000);
-                    Log.d("ServiceTi", ""+secondsLeft);
-                    time.setText(secondsLeft+"");
+                    Log.d("ServiceTi", "" + secondsLeft);
+                    time.setText(secondsLeft + "");
                 }
 
                 @Override
                 public void onFinish() {
                     // Perform any actions you want when the timer finishes
                     ((WindowManager) getSystemService(WINDOW_SERVICE)).removeView(iView);
-                    Stash.put(Constants.CHECK, true);
-                    Intent intent = new Intent(ctx, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    close();
-                    stopService(new Intent(getApplicationContext(), ForegroundService.class));
+                    timer.setVisibility(View.GONE);
+                    success.setVisibility(View.VISIBLE);
                 }
             };
 

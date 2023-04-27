@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.BillingActivity;
 import com.moutamid.typeking.R;
+import com.moutamid.typeking.VIPActivity;
 import com.moutamid.typeking.services.ForegroundService;
 import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.FragmentViewBinding;
@@ -118,7 +119,8 @@ public class ViewFragment extends Fragment {
                         .setMessage("You need to upgrade to a vip account to use this function.")
                         .setNegativeButton("CANCEL", (dialog, which) -> dialog.dismiss())
                         .setPositiveButton("UPGRADE", (dialog, which) -> {
-                            startActivity(new Intent(requireContext(), BillingActivity.class));
+                            startActivity(new Intent(requireContext(), VIPActivity.class));
+                            requireActivity().finish();
                         })
                         .show();
             } else {
@@ -128,25 +130,29 @@ public class ViewFragment extends Fragment {
 
 
         binding.seeOther.setOnClickListener(v -> {
-            String url = getNextUrl();
-            int rloww = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
-            currentPoints = rloww / 10;
-            binding.rewardCoins.setText(currentPoints+"");
-            Stash.put(Constants.COIN, currentPoints);
-            //binding.youtubePlayerViewFragmentView.release();
-            youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
-                @Override
-                public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
-                    CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer, youTubePlayerView);
-                    youTubePlayer.addListener(customPlayerUiController);
+            if (taskArrayList.size()>0){
+                String url = getNextUrl();
+                int rloww = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
+                currentPoints = rloww / 10;
+                binding.rewardCoins.setText(currentPoints+"");
+                Stash.put(Constants.COIN, currentPoints);
+                //binding.youtubePlayerViewFragmentView.release();
+                youTubePlayerView.getYouTubePlayerWhenReady(new YouTubePlayerCallback() {
+                    @Override
+                    public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
+                        CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer, youTubePlayerView);
+                        youTubePlayer.addListener(customPlayerUiController);
 
-                    if (isAutoPlayEnabled) {
-                        youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
-                    } else {
-                        youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
+                        if (isAutoPlayEnabled) {
+                            youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
+                        } else {
+                            youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                Toast.makeText(requireContext(), "No Video Found", Toast.LENGTH_SHORT).show();
+            }
             //initYoutubePlayer(url);
         });
 
@@ -347,55 +353,57 @@ public class ViewFragment extends Fragment {
     }
 
     private void uploadAddedVideoViews() {
-        progressDialog.show();
-        Constants.databaseReference().child(Constants.VIEW_TASKS)
-                .child(taskArrayList.get(currentPosition).getTaskKey())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        if (taskArrayList.size()>0) {
+            progressDialog.show();
+            Constants.databaseReference().child(Constants.VIEW_TASKS)
+                    .child(taskArrayList.get(currentPosition).getTaskKey())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        Taskk taskk = snapshot.getValue(Taskk.class);
+                            Taskk taskk = snapshot.getValue(Taskk.class);
 
-                        String currentViews = String.valueOf(taskk.getCurrentViewsQuantity());
+                            String currentViews = String.valueOf(taskk.getCurrentViewsQuantity());
 
-                        if (currentViews.equals(taskk.getTotalViewsQuantity())) {
+                            if (currentViews.equals(taskk.getTotalViewsQuantity())) {
 
-                            Constants.databaseReference().child(Constants.VIEW_TASKS)
-                                    .child(taskArrayList.get(currentPosition).getTaskKey())
-                                    .child("completedDate")
-                                    .setValue(Constants.getDate())
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            uploadAddedCoins();
-                                        }
-                                    });
-
-                        } else {
-
-                            Constants.databaseReference().child(Constants.VIEW_TASKS)
-                                    .child(taskArrayList.get(currentPosition).getTaskKey())
-                                    .child("currentViewsQuantity")
-                                    .setValue(taskk.getCurrentViewsQuantity() + 1)
-                                    .addOnSuccessListener(
-                                            new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    uploadAddedCoins();
-                                                }
+                                Constants.databaseReference().child(Constants.VIEW_TASKS)
+                                        .child(taskArrayList.get(currentPosition).getTaskKey())
+                                        .child("completedDate")
+                                        .setValue(Constants.getDate())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                uploadAddedCoins();
                                             }
-                                    );
+                                        });
+
+                            } else {
+
+                                Constants.databaseReference().child(Constants.VIEW_TASKS)
+                                        .child(taskArrayList.get(currentPosition).getTaskKey())
+                                        .child("currentViewsQuantity")
+                                        .setValue(taskk.getCurrentViewsQuantity() + 1)
+                                        .addOnSuccessListener(
+                                                new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        uploadAddedCoins();
+                                                    }
+                                                }
+                                        );
+
+                            }
 
                         }
 
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        }
+                    });
+        }
     }
 
     private void uploadAddedCoins() {

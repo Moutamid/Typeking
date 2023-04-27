@@ -79,7 +79,7 @@
             android:gravity="center"
             android:padding="8sp"
             android:textColor="@color/dark_grey"
-            android:text="Please Like this video" />
+            android:text="Please Like/Subscribe this channel" />
 
         <Button
             android:id="@+id/back"

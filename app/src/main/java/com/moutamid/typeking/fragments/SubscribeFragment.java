@@ -200,18 +200,6 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
 
     private void subscribeUserToChannel() {
 
-//        if (vipStatus) {
-//            if (remainingDailyLimitInt == 80) {
-//                Utils.toast(getString(R.string.yourdailylimitreached));
-//                return;
-//            }
-//        } else {
-//            if (remainingDailyLimitInt == 30) {
-//                Utils.toast(getString(R.string.yourdailylimitreached));
-//                return;
-//            }
-//        }
-
         if (subscribeTaskModelArrayList.size() == 0)
             return;
 
@@ -515,67 +503,63 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
     }
 
     private void uploadAddedSubscribers() {
-//        mProgress.hide();
-//        progressDialog.show();
+        if (subscribeTaskModelArrayList.size()>0){
+            Constants.databaseReference()
+                    .child(Constants.SUBSCRIBE_TASKS)
+                    .child(subscribeTaskModelArrayList.get(currentCounter).getTaskKey())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-        /*databaseReference.child("tasks")
-                .child(taskArrayList.get(currentPosition).getTaskKey())*/
-        //.child("currentViewsQuantity")
-        Constants.databaseReference()
-                .child(Constants.SUBSCRIBE_TASKS)
-                .child(subscribeTaskModelArrayList.get(currentCounter).getTaskKey())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            SubscribeTaskModel taskk = snapshot.getValue(SubscribeTaskModel.class);
 
-                        SubscribeTaskModel taskk = snapshot.getValue(SubscribeTaskModel.class);
+                            String currentViews = String.valueOf(taskk.getCurrentSubscribesQuantity());
 
-                        String currentViews = String.valueOf(taskk.getCurrentSubscribesQuantity());
+                            if (currentViews.equals(taskk.getTotalSubscribesQuantity())) {
 
-                        if (currentViews.equals(taskk.getTotalSubscribesQuantity())) {
-
-                            Constants.databaseReference()
-                                    .child(Constants.SUBSCRIBE_TASKS)
-                                    .child(subscribeTaskModelArrayList.get(currentCounter).getTaskKey())
-                                    .child("completedDate")
-                                    .setValue(Constants.getDate())
+                                Constants.databaseReference()
+                                        .child(Constants.SUBSCRIBE_TASKS)
+                                        .child(subscribeTaskModelArrayList.get(currentCounter).getTaskKey())
+                                        .child("completedDate")
+                                        .setValue(Constants.getDate())
 //                                    .setValue(new Utils().getDate())
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            uploadAddedCoins();
-                                        }
-                                    });
-
-                        } else {
-
-                            Constants.databaseReference()
-                                    .child(Constants.SUBSCRIBE_TASKS)
-                                    .child(subscribeTaskModelArrayList.get(currentCounter).getTaskKey())
-                                    .child("currentSubscribesQuantity")
-                                    .setValue(taskk.getCurrentSubscribesQuantity() + 1)
-                                    .addOnSuccessListener(
-                                            new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-
-                                                    uploadAddedCoins();
-                                                }
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                uploadAddedCoins();
                                             }
-                                    );
+                                        });
+
+                            } else {
+
+                                Constants.databaseReference()
+                                        .child(Constants.SUBSCRIBE_TASKS)
+                                        .child(subscribeTaskModelArrayList.get(currentCounter).getTaskKey())
+                                        .child("currentSubscribesQuantity")
+                                        .setValue(taskk.getCurrentSubscribesQuantity() + 1)
+                                        .addOnSuccessListener(
+                                                new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+
+                                                        uploadAddedCoins();
+                                                    }
+                                                }
+                                        );
+
+                            }
 
                         }
 
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        progressDialog.dismiss();
-                        Log.d(TAG, "onCancelled: " + error.getMessage());
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                        mProgress.hide();
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            progressDialog.dismiss();
+                            Log.d(TAG, "onCancelled: " + error.getMessage());
+                            Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            mProgress.hide();
+                        }
+                    });
+        }
     }
 
     private void uploadAddedCoins() {

@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.BillingActivity;
 import com.moutamid.typeking.R;
+import com.moutamid.typeking.VIPActivity;
 import com.moutamid.typeking.test.LikedFragment;
 import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.FragmentMainBinding;
@@ -75,7 +76,7 @@ public class MainFragment extends Fragment {
         });
 
         binding.promotion.setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), BillingActivity.class));
+            startActivity(new Intent(requireContext(), VIPActivity.class));
         });
 
         return binding.getRoot();

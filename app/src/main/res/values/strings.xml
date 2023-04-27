@@ -3,25 +3,26 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="unsubscribe_warning"><b>DO NOT <u>Unsubscribe</u></b> any channels or <b><u>Unlike</u></b> any videos we will <b>block</b> your account if you <u>unsubscribe  any channel or unlike any video</u></string>
     <string name="unlike_warning"><b>Do Not <u>Unlike</u></b> any videos we will <b>block</b> your account if you <u>unlike any video</u></string>
     <string name="vip_upgrade">Upgrade to VIP account to get more benefit. Tap here to get more information</string>
     <string name="campaign_message">Your campaign appear here. Click add button to create campaign to get subscribers for your channel</string>
 
 
-    <string name="client_id" translatable="false">890062472575-miorkevdhgsr795467k3gh5ehqoi0tge.apps.googleusercontent.com</string>
-    <string name="defaultSenderId" translatable="false">890062472575</string>
-    <string name="youtube_api_key" translatable="false">AIzaSyBcgg_QpZ2O60W4UhMd28XbBclcQb8oCR4</string>
+    <string name="client_id" translatable="false">619144300144-r4ka9v2geld3100j0t1v16nilkljjgas.apps.googleusercontent.com</string>
+    <string name="defaultSenderId" translatable="false">619144300144</string>
+    <string name="youtube_api_key" translatable="false">AIzaSyAZn8n7Q8QZwFPB0tGZsSsuBY8GOQffoKE</string>
 
     <string name="Interstial_ID">ca-app-pub-3940256099942544/1033173712</string>
     <string name="Banner_ID">ca-app-pub-3940256099942544/6300978111</string>
     <string name="Native_ID">ca-app-pub-3940256099942544/2247696110</string>
 
     <string name="warning"><b>Warning:</b>\n\n - Do not create too many campaigns for one video, YT will not count many views from IP in very short time.\n- Video length must be at least 45 seconds.\n- YT needs 72 hours to update views from third party apps.\n\nSo please wait at least 72 hour to see your views updated on YT app. Use YT Studio to check view in real time.</string>
-    <string name="month_subs">You will be charged Rs 650.00 + tax automatically every month until you cancel. Cancel anytime in Subscription on Google Play.</string>
-    <string name="year_subs">Billing starts at the end of 3 days free trial. You will be charges RS 1650.00 + tax automatically every 3 months until you cancel. Cancel anytime in Subscription on Google Play.</string>
+    <string name="month_subs">You will be charged $2.32 + tax automatically every month until you cancel. Cancel anytime in Subscription on Google Play.</string>
+    <string name="year_subs">Billing starts at the end of 3 days free trial. You will be charges $5.89 + tax automatically every 3 months until you cancel. Cancel anytime in Subscription on Google Play.</string>
     <string name="pros_vip">- Remove ads.\n- Reduce 10% campaign cost.\n- Remove countdown timer after subscribed channel.\n-Campaign limit up-to 10.\n- Add 10 daily quotas in Subscriber and Like tabs</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
