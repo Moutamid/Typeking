@@ -591,13 +591,16 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
                                                         Toast.makeText(requireContext(), "Subscribed Done", Toast.LENGTH_SHORT).show();
                                                         Stash.put(Constants.CHECK, false);
                                                         currentCounter++;
-                                                        int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                                                        currentPoints = rlow / 10;
-                                                        Stash.put(Constants.COIN, currentPoints);
+
                                                         if (currentCounter >= subscribeTaskModelArrayList.size()) {
                                                             Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();
                                                             b.videoImageSubscribe.setBackgroundResource(0);
-                                                        } else setDataOnViews(currentCounter, true);
+                                                        } else {
+                                                            int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                                                            currentPoints = rlow / 10;
+                                                            Stash.put(Constants.COIN, currentPoints);
+                                                            setDataOnViews(currentCounter, true);
+                                                        };
 
                                                     }
                                                 });

@@ -96,9 +96,10 @@ public class CampaignDetailActivity extends AppCompatActivity {
         binding.progressIndicator.setMax(tot);
         binding.progressIndicator.setProgress(pro);
 
-        getViewers();
+        getSubscribers();
     }
     private void getViewers() {
+
         Constants.databaseReference().child(Constants.VIEW_TASKS).child(viewTaskModel.getTaskKey())
                 .child(Constants.VIEWER_PATH)
                 .get().addOnSuccessListener(dataSnapshot -> {
@@ -129,7 +130,7 @@ public class CampaignDetailActivity extends AppCompatActivity {
         binding.progressIndicator.setMax(tot);
         binding.progressIndicator.setProgress(pro);
 
-        getSubscribers();
+        getViewers();
     }
     private void getSubscribers() {
         Constants.databaseReference().child(Constants.SUBSCRIBE_TASKS).child(subscribeTaskModel.getTaskKey())

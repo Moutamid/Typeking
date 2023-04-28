@@ -163,8 +163,8 @@ public class Window extends ContextWrapper {
         new Handler().postDelayed(() -> {
             Log.d("ServiceTi", "handler");
             isRunning = true;
-
-            countDownTimer = new CountDownTimer((tt * 1000), 1000) {
+            // TODO add tt
+            countDownTimer = new CountDownTimer((10 * 1000), 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     // Update the TextView with the remaining time

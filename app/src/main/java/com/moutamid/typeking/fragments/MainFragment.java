@@ -22,6 +22,7 @@ import com.moutamid.typeking.BillingActivity;
 import com.moutamid.typeking.R;
 import com.moutamid.typeking.VIPActivity;
 import com.moutamid.typeking.test.LikedFragment;
+import com.moutamid.typeking.test.SubscribedFragment;
 import com.moutamid.typeking.utilis.Constants;
 import com.moutamid.typeking.databinding.FragmentMainBinding;
 import com.moutamid.typeking.models.UserDetails;
@@ -91,7 +92,7 @@ public class MainFragment extends Fragment {
                     getChildFragmentManager().beginTransaction().replace(R.id.framelayout, new ViewFragment()).commit();
                     break;
                 case R.id.nav_subscribe:
-                    getChildFragmentManager().beginTransaction().replace(R.id.framelayout, new SubscribeFragment()).commit();
+                    getChildFragmentManager().beginTransaction().replace(R.id.framelayout, new SubscribedFragment()).commit();
                     break;
                 case R.id.nav_like:
                     getChildFragmentManager().beginTransaction().replace(R.id.framelayout, new LikedFragment()).commit();
