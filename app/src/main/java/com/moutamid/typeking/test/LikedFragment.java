@@ -647,12 +647,6 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
             }
         }
 
-        /**
-         * Fetch information about the "GoogleDevelopers" YouTube channel.
-         *
-         * @return List of Strings containing information about the channel.
-         * @throws IOException
-         */
         private List<String> getDataFromApi() throws IOException {
             // Get a list of up to 10 files.
             List<String> channelInfo = new ArrayList<String>();
@@ -662,7 +656,6 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
             VideoListResponse response = request.setId(currentVideoId).execute();
 
             Log.d("clima", response.getItems().get(0).getSnippet().getChannelId());
-
 
             video = response.getItems().get(0);
 
