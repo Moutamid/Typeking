@@ -156,7 +156,7 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
 
                     if (subscribeTaskModelArrayList.size()>0){
                         int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                        currentPoints = rlow / 10;
+                        currentPoints = rlow - (rlow / 10);
                         Stash.put(Constants.COIN, currentPoints);
                     }
 
@@ -184,7 +184,7 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
 
             } else{
                 int rloww = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                currentPoints = rloww / 10;
+                currentPoints = rloww - (rloww / 10);
                 Stash.put(Constants.COIN, currentPoints);
                 setDataOnViews(currentCounter, false);
             }
@@ -597,7 +597,7 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
                                                             b.videoImageSubscribe.setBackgroundResource(0);
                                                         } else {
                                                             int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                                                            currentPoints = rlow / 10;
+                                                            currentPoints = rlow - (rlow / 10);
                                                             Stash.put(Constants.COIN, currentPoints);
                                                             setDataOnViews(currentCounter, true);
                                                         };
@@ -760,7 +760,7 @@ public class SubscribeFragment extends Fragment implements EasyPermissions.Permi
 
                                         currentCounter++;
                                         int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                                        currentPoints = rlow / 10;
+                                        currentPoints = rlow - (rlow / 10);
                                         Stash.put(Constants.COIN, currentPoints);
                                         if (currentCounter >= subscribeTaskModelArrayList.size()) {
                                             Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();

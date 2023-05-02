@@ -24,5 +24,11 @@
     <string name="pros_vip">- Remove ads.\n- Reduce 10% campaign cost.\n- Remove countdown timer after subscribed channel.\n-Campaign limit up-to 10.\n- Add 10 daily quotas in Subscriber and Like tabs</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="faq1"><![CDATA[First, You need to collect the coin by subscribe other channel or make a purchase. when enough coin, You can create campaign to promote your channel: in Campaign tab -> add button -> select your channel and make order number of subscriber you want]]></string>
+    <string name="faq2"><![CDATA[Open YT app -> profile icon -> My Channel -> More button ->Share-> Copy link]]></string>
+    <string name="faq3">No. As it is against YT terms and condition. All Subscriber is real user. It is very safe with your Channel</string>
+    <string name="faq4">Sometime user subscribe your channel then unsubscribe or their account have been removed, so real subscriber maybe less than your order.</string>
+    <string name="faq5">You can not do it. If other people subscribe then unsubscribe, real subscriber of your channel will be reduce. So we do not allow you unsubscribe the channel you subscribed on this app. If you unsubscribe your channel you subscribed on this app, We will block your account</string>
+    <string name="faq6">If you subscribed this channel but can not get coin, please check if your account logged in this app and YT app is same or not.</string>
 
 </resources>

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -95,6 +96,33 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_buy:
                     startActivity(new Intent(MainActivity.this, BillingActivity.class));
                     finish();
+                    break;
+                case R.id.nav_faq:
+                    startActivity(new Intent(MainActivity.this, FaqActivity.class));
+                    finish();
+                    break;
+                case R.id.nav_privacy:
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+                    startActivity(browserIntent);
+                    break;
+                case R.id.nav_rate:
+                    final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    }
+                    break;
+                case R.id.nav_feedback:
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:"));
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"example.yahoo.com"});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "App feedback");
+                        startActivity(intent);
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        Toast.makeText(MainActivity.this, "There are no email client installed on your device.", Toast.LENGTH_LONG).show();
+                    }
                     break;
             }
 

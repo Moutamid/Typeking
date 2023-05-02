@@ -164,21 +164,34 @@ public class Window extends ContextWrapper {
             Log.d("ServiceTi", "handler");
             isRunning = true;
             // TODO add tt
-            countDownTimer = new CountDownTimer((10 * 1000), 1000) {
+            countDownTimer = new CountDownTimer((tt * 1000), 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
                     // Update the TextView with the remaining time
                     int secondsLeft = (int) (millisUntilFinished / 1000);
-                    Log.d("ServiceTi", "" + secondsLeft);
+                    Log.d("ServiceTi", "onTick" + secondsLeft);
                     time.setText(secondsLeft + "");
+                    Log.d("ServiceTi", "onTick 2" + secondsLeft);
                 }
 
                 @Override
                 public void onFinish() {
                     // Perform any actions you want when the timer finishes
-                    ((WindowManager) getSystemService(WINDOW_SERVICE)).removeView(iView);
-                    timer.setVisibility(View.GONE);
-                    success.setVisibility(View.VISIBLE);
+                    if (Stash.getBoolean(Constants.isAutoPlayEnabled, false)) {
+                        Stash.put(Constants.CHECK, true);
+                        Log.d("ServiceTi", "onFinish IFFF" );
+                        Intent intent = new Intent(ctx, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        close();
+                        stopService(new Intent(getApplicationContext(), ForegroundService.class));
+                    } else {
+                        Log.d("ServiceTi", "onFinish" );
+                        ((WindowManager) getSystemService(WINDOW_SERVICE)).removeView(iView);
+                        timer.setVisibility(View.GONE);
+                        success.setVisibility(View.VISIBLE);
+                    }
+
                 }
             };
 

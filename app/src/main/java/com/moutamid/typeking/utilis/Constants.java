@@ -69,6 +69,7 @@ public class Constants {
     public static final String TYPE_VIEW = "TYPE_VIEW";
     public static final String TYPE_LIKE = "TYPE_LIKE";
     public static final String TYPE_SUBSCRIBE = "TYPE_SUBSCRIBE";
+    public static final String isAutoPlayEnabled = "isAutoPlayEnabled";
 
     private static InterstitialAd mInterstitialAd;
     public static AdRequest adRequest = new AdRequest.Builder().build();

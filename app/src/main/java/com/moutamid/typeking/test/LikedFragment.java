@@ -57,8 +57,13 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeScopes;
+import com.google.api.services.youtube.model.ChannelListResponse;
+import com.google.api.services.youtube.model.SubscriptionListResponse;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.google.api.services.youtube.model.VideoRating;
+import com.google.api.services.youtube.model.VideoSnippet;
+import com.google.api.services.youtube.model.VideoStatus;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -143,7 +148,7 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
                     }
                     if (likeTaskModelArrayList.size() > 0) {
                         int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                        currentPoints = rlow / 10;
+                        currentPoints = rlow - (rlow / 10);
                         Stash.put(Constants.COIN, currentPoints);
                     }
                     progressDialog.dismiss();
@@ -183,7 +188,7 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
                     Toast.makeText(requireContext(), "End Of Task!", Toast.LENGTH_SHORT).show();
                 } else {
                     int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                    currentPoints = rlow / 10;
+                    currentPoints = rlow - (rlow / 10);
                     Stash.put(Constants.COIN, currentPoints);
                     setDataOnViews(currentCounter, false);
                 }
@@ -596,7 +601,7 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
                                                             // b.videoIdLike.setText("Empty");
                                                         } else {
                                                             int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                                                            currentPoints = rlow / 10;
+                                                            currentPoints = rlow - (rlow / 10);
                                                             Stash.put(Constants.COIN, currentPoints);
                                                             setDataOnViews(currentCounter, true);
                                                         }
@@ -649,7 +654,7 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
 
         private List<String> getDataFromApi() throws IOException {
             // Get a list of up to 10 files.
-            List<String> channelInfo = new ArrayList<String>();
+            List<String> channelInfo = new ArrayList<>();
 
             YouTube.Videos.List request = mService.videos()
                     .list("snippet,contentDetails,statistics,status");
@@ -736,9 +741,35 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
                 .setApplicationName("YouTube Data API Android Quickstart")
                 .build();
 
+        YouTube.Videos.List videosListRequest = youtubeService.videos().list("snippet,contentDetails,statistics,status");
+        videosListRequest.setId(currentVideoId); // set the video ID
+        videosListRequest.setFields("items(snippet(title),statistics(likeCount,dislikeCount),contentDetails(duration),id),statistics(viewCount),status(likeCount,isLiked)");
+
+//        new Thread(() -> {
+//            VideoListResponse response = null;
+//            try {
+//                response = videosListRequest.execute();
+//                VideoStatus status = response.getItems().get(0).getStatus();
+//                // boolean isLiked = status.isLiked();
+//
+//                Video video = response.getItems().get(0);
+//                VideoSnippet snippet = video.getSnippet();
+//                // String likeStatus = snippet.getLikeStatus();
+//
+//                // VideoRating rating = snippet.getVideoRating();
+//                // String likeStatus2 = rating.getRating();
+//
+//                Log.d(TAG, "Failure : " + status.getFailureReason());
+//                Log.d(TAG, "Rejection : " + status.getRejectionReason());
+//                Log.d(TAG, "Failure : " + status.getUploadStatus());
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        }).start();
+
         YouTube.Videos.Rate request = youtubeService.videos()
                 .rate(currentVideoId, "like");
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -752,7 +783,6 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
                 }
             }
         }).start();
-
     }
 
     public boolean checkOverlayPermission() {

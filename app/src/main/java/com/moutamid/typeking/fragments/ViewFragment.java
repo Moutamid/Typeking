@@ -4,8 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -55,6 +57,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTube
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerUtils;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import java.security.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,6 +114,8 @@ public class ViewFragment extends Fragment {
                     }
                 });
 
+        binding.switchAuto.setChecked(Stash.getBoolean(Constants.isAutoPlayEnabled, false));
+
         binding.switchAuto.setOnClickListener(v -> {
             if (!VIP_STATUS) {
                 binding.switchAuto.setChecked(false);
@@ -124,7 +129,7 @@ public class ViewFragment extends Fragment {
                         })
                         .show();
             } else {
-                binding.switchAuto.setChecked(true);
+                //binding.switchAuto.setChecked(true);
             }
         });
 
@@ -133,7 +138,7 @@ public class ViewFragment extends Fragment {
             if (taskArrayList.size()>0){
                 String url = getNextUrl();
                 int rloww = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
-                currentPoints = rloww / 10;
+                currentPoints = rloww - (rloww / 10);
                 binding.rewardCoins.setText(currentPoints+"");
                 Stash.put(Constants.COIN, currentPoints);
                 //binding.youtubePlayerViewFragmentView.release();
@@ -159,7 +164,10 @@ public class ViewFragment extends Fragment {
         binding.switchAuto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isAutoPlayEnabled = isChecked;
+                if (VIP_STATUS) {
+                    isAutoPlayEnabled = isChecked;
+                    Stash.put(Constants.isAutoPlayEnabled, isAutoPlayEnabled);
+                }
             }
         });
 
@@ -183,7 +191,7 @@ public class ViewFragment extends Fragment {
                         videoUrl = taskArrayList.get(0).getVideoUrl();
                         initYoutubePlayer(videoUrl);
                         int rlow = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
-                        currentPoints = rlow / 10;
+                        currentPoints = rlow - (rlow / 10);
                         binding.rewardCoins.setText(currentPoints+"");
                         Stash.put(Constants.COIN, currentPoints);
                     } else {
@@ -238,7 +246,7 @@ public class ViewFragment extends Fragment {
         youTubePlayerView.initialize(youTubePlayerListener, options);
 
         int rlow = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
-        currentPoints = rlow / 10;
+        currentPoints = rlow - (rlow / 10);
         Stash.put(Constants.COIN, currentPoints);
         binding.rewardCoins.setText(currentPoints+"");
         binding.seconds.setText(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
@@ -280,7 +288,7 @@ public class ViewFragment extends Fragment {
 
 
             int rlow = Integer.parseInt(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
-            currentPoints = rlow / 10;
+            currentPoints = rlow - (rlow / 10);
             binding.rewardCoins.setText(currentPoints+"");
             Stash.put(Constants.COIN, currentPoints);
             binding.seconds.setText(taskArrayList.get(currentPosition).getTotalViewTimeQuantity());
@@ -610,20 +618,14 @@ public class ViewFragment extends Fragment {
     }
 
     public void startService(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(Settings.canDrawOverlays(requireContext())) {
-                // start the service based on the android version
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Intent i = new Intent(requireContext(), ForegroundService.class);
-                    requireContext().startForegroundService(i);
-                } else {
-                    Intent i = new Intent(requireContext(), ForegroundService.class);
-                    requireContext().startService(i);
-                }
-            }
-        }else{
+        if(Settings.canDrawOverlays(requireContext())) {
+            // start the service based on the android version
             Intent i = new Intent(requireContext(), ForegroundService.class);
-            requireContext().startService(i);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                requireContext().startForegroundService(i);
+            } else {
+                requireContext().startService(i);
+            }
         }
     }
 
