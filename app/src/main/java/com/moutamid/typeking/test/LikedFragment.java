@@ -169,7 +169,7 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
 
         mProgress = new ProgressDialog(requireContext());
         mProgress.setMessage("Calling Youtube Data API");
-
+        mProgress.setCancelable(false);
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
                         requireContext().getApplicationContext(), Arrays.asList(SCOPES))
@@ -276,7 +276,7 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
         // IF SECOND OR THIRD TIME
         binding.thumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER);
         binding.thumbnail.setImageResource(R.drawable.ic_baseline_access_time_filled_24);
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(3000, 1000) {
             public void onTick(long millisUntilFinished) {
                 binding.thumbnail.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 binding.thumbnail.setImageResource(R.drawable.ic_baseline_access_time_filled_24);
@@ -603,8 +603,9 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
                                                             int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
                                                             currentPoints = rlow - (rlow / 10);
                                                             Stash.put(Constants.COIN, currentPoints);
-                                                            setDataOnViews(currentCounter, true);
                                                         }
+
+                                                        setDataOnViews(currentCounter, true);
 
                                                     }
                                                 });
@@ -776,6 +777,8 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
                 try {
                     request.execute();
                     requireActivity().runOnUiThread(() -> {
+                        Stash.put(Constants.CHECK, false);
+                        mProgress.dismiss();
                         uploadAddedLikers();
                     });
                 } catch (IOException e) {

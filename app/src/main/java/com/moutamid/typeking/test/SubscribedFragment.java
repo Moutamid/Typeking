@@ -141,6 +141,7 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
 
         mProgress = new ProgressDialog(requireContext());
         mProgress.setMessage("Calling Youtube Data API");
+        mProgress.setCancelable(false);
 
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(requireContext().getApplicationContext(), Arrays.asList(SCOPES))
@@ -168,7 +169,7 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
 
                     if (subscribeTaskModelArrayList.size()>0){
                         int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                        currentPoints = rlow / 10;
+                        currentPoints = rlow - (rlow / 10);
                         Stash.put(Constants.COIN, currentPoints);
                         setDataOnViews(currentCounter, false);
                     }
@@ -199,7 +200,7 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
 
             } else{
                 int rloww = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                currentPoints = rloww / 10;
+                currentPoints = rloww - (rloww / 10);
                 Stash.put(Constants.COIN, currentPoints);
                 setDataOnViews(currentCounter, false);
             }
@@ -641,10 +642,10 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
                                                             b.videoImageSubscribe.setBackgroundResource(0);
                                                         } else {
                                                             int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                                                            currentPoints = rlow / 10;
+                                                            currentPoints = rlow - (rlow / 10);
                                                             Stash.put(Constants.COIN, currentPoints);
-                                                            setDataOnViews(currentCounter, true);
                                                         }
+                                                        setDataOnViews(currentCounter, true);
 
                                                     }
                                                 });
@@ -665,32 +666,24 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
     }
 
     public boolean checkOverlayPermission(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(requireContext())) {
-                // send user to the device settings
-                Intent myIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                startActivity(myIntent);
-                return false;
-            }
+        if (!Settings.canDrawOverlays(requireContext())) {
+            // send user to the device settings
+            Intent myIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+            startActivity(myIntent);
+            return false;
         }
         return true;
     }
 
     public void startService(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(Settings.canDrawOverlays(requireContext())) {
-                // start the service based on the android version
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Intent i = new Intent(requireContext(), ForegroundService.class);
-                    requireContext().startForegroundService(i);
-                } else {
-                    Intent i = new Intent(requireContext(), ForegroundService.class);
-                    requireContext().startService(i);
-                }
-            }
-        }else{
+        if(Settings.canDrawOverlays(requireContext())) {
+            // start the service based on the android version
             Intent i = new Intent(requireContext(), ForegroundService.class);
-            requireContext().startService(i);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                requireContext().startForegroundService(i);
+            } else {
+                requireContext().startService(i);
+            }
         }
     }
 
@@ -735,7 +728,12 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
                                     if (currentCounter >= subscribeTaskModelArrayList.size()) {
                                         Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();
                                         b.videoImageSubscribe.setBackgroundResource(0);
-                                    } else setDataOnViews(currentCounter, false);
+                                    } else {
+                                        int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                                        currentPoints = rlow - (rlow / 10);
+                                        Stash.put(Constants.COIN, currentPoints);
+                                        setDataOnViews(currentCounter, false);
+                                    }
 
                                 }
                             });
@@ -753,7 +751,7 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
             currentVideoLink = subscribeTaskModelArrayList.get(counter).getVideoUrl();
             int i = Integer.parseInt(subscribeTaskModelArrayList.get(counter).getTotalViewTimeQuantity());
             Stash.put(Constants.TIME, i);
-            Stash.put(Constants.COIN, currentPoints);
+            //Stash.put(Constants.COIN, currentPoints);
             progressDialog.dismiss();
 
             return;
@@ -762,7 +760,7 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
         // IF SECOND OR THIRD TIME
         b.videoImageSubscribe.setScaleType(ImageView.ScaleType.FIT_CENTER);
         b.videoImageSubscribe.setImageResource(R.drawable.ic_baseline_access_time_filled_24);
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(3000, 1000) {
             public void onTick(long millisUntilFinished) {
                 b.videoImageSubscribe.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 b.videoImageSubscribe.setImageResource(R.drawable.ic_baseline_access_time_filled_24);
@@ -803,13 +801,16 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
                                         b.videoImageSubscribe.setImageResource(R.drawable.ic_baseline_access_time_filled_24);
 
                                         currentCounter++;
-                                        int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                                        currentPoints = rlow / 10;
-                                        Stash.put(Constants.COIN, currentPoints);
+
                                         if (currentCounter >= subscribeTaskModelArrayList.size()) {
                                             Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();
                                             b.videoImageSubscribe.setBackgroundResource(0);
-                                        } else setDataOnViews(currentCounter, false);
+                                        } else {
+                                            int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                                            currentPoints = rlow - (rlow / 10);
+                                            Stash.put(Constants.COIN, currentPoints);
+                                            setDataOnViews(currentCounter, false);
+                                        }
                                     }
                                 });
                                 return false;

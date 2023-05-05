@@ -23,7 +23,8 @@ public class ForegroundService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        // throw new UnsupportedOperationException("Not yet implemented");
+        return null;
     }
 
     @Override

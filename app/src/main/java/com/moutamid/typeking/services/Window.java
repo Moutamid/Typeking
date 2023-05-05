@@ -123,7 +123,7 @@ public class Window extends ContextWrapper {
         time.setText(tt + "");
 
         emptyView.setOnClickListener(v -> {
-            Toast.makeText(context, "Please finish watching the video before like to this video", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Please finish watching the video before like/subscribe to this video", Toast.LENGTH_SHORT).show();
         });
 
         back.setOnClickListener(v -> {
