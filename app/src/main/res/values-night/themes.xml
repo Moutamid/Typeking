@@ -15,6 +15,11 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Dialog">
+        <item name="android:windowEnterAnimation">@animator/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@animator/slide_out_bottom</item>
+    </style>
+
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="colorPrimary">@color/white</item>

@@ -16,9 +16,9 @@
         android:icon="@drawable/baseline_monetization_on_24"
         android:title="Watch ads video" />
 
-    <item android:id="@+id/nav_invite"
-        android:icon="@drawable/round_share_24"
-        android:title="Invite friends" />
+<!--    <item android:id="@+id/nav_invite"-->
+<!--        android:icon="@drawable/round_share_24"-->
+<!--        android:title="Invite friends" />-->
 
     <item android:title="Communicate">
         <menu>

@@ -17,6 +17,7 @@
     <string name="Interstial_ID">ca-app-pub-3940256099942544/1033173712</string>
     <string name="Banner_ID">ca-app-pub-3940256099942544/6300978111</string>
     <string name="Native_ID">ca-app-pub-3940256099942544/2247696110</string>
+    <string name="Reward_ID">ca-app-pub-3940256099942544/5224354917</string>
 
     <string name="warning"><b>Warning:</b>\n\n - Do not create too many campaigns for one video, YT will not count many views from IP in very short time.\n- Video length must be at least 45 seconds.\n- YT needs 72 hours to update views from third party apps.\n\nSo please wait at least 72 hour to see your views updated on YT app. Use YT Studio to check view in real time.</string>
     <string name="month_subs">You will be charged $2.32 + tax automatically every month until you cancel. Cancel anytime in Subscription on Google Play.</string>
