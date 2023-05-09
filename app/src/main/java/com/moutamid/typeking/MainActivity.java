@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                     break;
                 case R.id.nav_privacy:
                     binding.drawLayout.closeDrawer(GravityCompat.START);
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://tubekingapp.blogspot.com/2023/05/privacy-policy-1.html"));
                     startActivity(browserIntent);
                     break;
                 case R.id.nav_rate:
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                     try {
                         Intent intent = new Intent(Intent.ACTION_SENDTO);
                         intent.setData(Uri.parse("mailto:"));
-                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"example@gmail.com"});
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"tubekingapp@gmail.com"});
                         intent.putExtra(Intent.EXTRA_SUBJECT, "App feedback");
                         startActivity(intent);
                     } catch (android.content.ActivityNotFoundException ex) {

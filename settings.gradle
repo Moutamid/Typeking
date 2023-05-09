@@ -16,6 +16,6 @@ dependencyResolutionManagement {
         jcenter()
     }
 }
-rootProject.name = "Typeking"
+rootProject.name = "TubeKing"
 include ':app'
 include ':nativetemplates'
