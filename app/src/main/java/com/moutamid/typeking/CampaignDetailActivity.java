@@ -12,11 +12,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.fxn.stash.Stash;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.moutamid.typeking.adapter.UserListAdapter;
 import com.moutamid.typeking.databinding.ActivityCampaignDetailBinding;
 import com.moutamid.typeking.models.AllUserModel;

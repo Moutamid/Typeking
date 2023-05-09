@@ -12,7 +12,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -29,7 +28,6 @@ import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -68,17 +66,14 @@ import com.google.api.services.youtube.model.VideoListResponse;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonArray;
 import com.moutamid.typeking.R;
 import com.moutamid.typeking.databinding.FragmentSubscribedBinding;
-import com.moutamid.typeking.fragments.SubscribeFragment;
 import com.moutamid.typeking.models.SubscribeTaskModel;
 import com.moutamid.typeking.services.ForegroundService;
 import com.moutamid.typeking.utilis.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;

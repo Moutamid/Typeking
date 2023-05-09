@@ -18,7 +18,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.moutamid.typeking.BillingActivity;
 import com.moutamid.typeking.R;
 import com.moutamid.typeking.VIPActivity;
 import com.moutamid.typeking.test.LikedFragment;

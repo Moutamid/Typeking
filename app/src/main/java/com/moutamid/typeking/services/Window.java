@@ -1,6 +1,5 @@
 package com.moutamid.typeking.services;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;

@@ -1,37 +1,20 @@
 package com.moutamid.typeking.utilis;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-
-import androidx.appcompat.app.AlertDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Random;
 
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
-import android.os.LocaleList;
 import android.widget.Toast;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
-import androidx.appcompat.app.AlertDialog;
 //import com.google.gson.Gson;
 //import com.google.gson.GsonBuilder;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
 
 public class Utils {
 

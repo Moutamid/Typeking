@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.moutamid.typeking.R;
 import com.moutamid.typeking.models.AllUserModel;
-import com.moutamid.typeking.models.ViewersModel;
 
 import java.util.ArrayList;
 
