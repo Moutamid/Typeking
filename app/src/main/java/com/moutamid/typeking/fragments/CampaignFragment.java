@@ -38,6 +38,9 @@ import java.util.Collections;
 public class CampaignFragment extends Fragment {
     FragmentCampaignBinding binding;
     ArrayList<TasksTypeModel> allTasksArrayList = new ArrayList<>();
+    ArrayList<TasksTypeModel> views = new ArrayList<>();
+    ArrayList<TasksTypeModel> likes = new ArrayList<>();
+    ArrayList<TasksTypeModel> subs = new ArrayList<>();
     CampaignAdapter adapter;
     public CampaignFragment() {
         // Required empty public constructor
@@ -70,19 +73,17 @@ public class CampaignFragment extends Fragment {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        allTasksArrayList.clear();
+                        views.clear();
                         if (snapshot.exists()) {
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 ViewTaskModel task = dataSnapshot.getValue(ViewTaskModel.class);
                                 TasksTypeModel tasksTypeModel = new TasksTypeModel();
                                 tasksTypeModel.setViewTaskModel(task);
                                 tasksTypeModel.setType(Constants.TYPE_VIEW);
-                                allTasksArrayList.add(tasksTypeModel);
+                                views.add(tasksTypeModel);
                             }
-                            getLikeTasksList();
-                        } else {
-                            getLikeTasksList();
                         }
+                        getLikeTasksList();
                     }
 
                     @Override
@@ -99,6 +100,7 @@ public class CampaignFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
+                            likes.clear();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                                 LikeTaskModel task = dataSnapshot.getValue(LikeTaskModel.class);
@@ -106,12 +108,10 @@ public class CampaignFragment extends Fragment {
                                 TasksTypeModel tasksTypeModel = new TasksTypeModel();
                                 tasksTypeModel.setLikeTaskModel(task);
                                 tasksTypeModel.setType(Constants.TYPE_LIKE);
-                                allTasksArrayList.add(tasksTypeModel);
+                                likes.add(tasksTypeModel);
                             }
-                            getSubscribeTasksList();
-                        } else {
-                            getSubscribeTasksList();
                         }
+                        getSubscribeTasksList();
                     }
 
                     @Override
@@ -128,23 +128,17 @@ public class CampaignFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
+                            subs.clear();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
                                 SubscribeTaskModel task = dataSnapshot.getValue(SubscribeTaskModel.class);
-
                                 TasksTypeModel tasksTypeModel = new TasksTypeModel();
                                 tasksTypeModel.setSubscribeTaskModel(task);
                                 tasksTypeModel.setType(Constants.TYPE_SUBSCRIBE);
-
-                                allTasksArrayList.add(tasksTypeModel);
-
+                                subs.add(tasksTypeModel);
                             }
-                            Collections.reverse(allTasksArrayList);
-                            initRecyclerView();
-                        } else {
-                            Collections.reverse(allTasksArrayList);
-                            initRecyclerView();
                         }
+
+                        initRecyclerView();
                     }
 
                     @Override
@@ -157,14 +151,18 @@ public class CampaignFragment extends Fragment {
     }
 
     private void initRecyclerView() {
+        allTasksArrayList.clear();
+        allTasksArrayList.addAll(views);
+        allTasksArrayList.addAll(likes);
+        allTasksArrayList.addAll(subs);
+        Collections.reverse(allTasksArrayList);
+
         if (allTasksArrayList.size() > 0){
             binding.noCampLayout.setVisibility(View.GONE);
             binding.recycler.setVisibility(View.VISIBLE);
 
             adapter = new CampaignAdapter(requireContext(), allTasksArrayList);
             binding.recycler.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-
         } else {
             binding.noCampLayout.setVisibility(View.VISIBLE);
             binding.recycler.setVisibility(View.GONE);
