@@ -92,6 +92,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<CampaignAdapter.Campai
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .setPositiveButton("Yes", (dialog, which) -> {
                     Constants.databaseReference().child(path).child(model.getTaskKey()).removeValue();
+                    list.remove(position);
                     notifyItemRemoved(position);
                 }).show();
     }
@@ -102,6 +103,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<CampaignAdapter.Campai
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .setPositiveButton("Yes", (dialog, which) -> {
                     Constants.databaseReference().child(path).child(model.getTaskKey()).removeValue();
+                    list.remove(position);
                     notifyItemRemoved(position);
                 }).show();
     }
@@ -112,6 +114,7 @@ public class CampaignAdapter extends RecyclerView.Adapter<CampaignAdapter.Campai
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .setPositiveButton("Yes", (dialog, which) -> {
                     Constants.databaseReference().child(path).child(model.getTaskKey()).removeValue();
+                    list.remove(position);
                     notifyItemRemoved(position);
                 }).show();
     }

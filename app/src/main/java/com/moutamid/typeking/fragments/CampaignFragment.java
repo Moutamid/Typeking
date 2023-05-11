@@ -73,8 +73,8 @@ public class CampaignFragment extends Fragment {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        views.clear();
                         if (snapshot.exists()) {
+                            views.clear();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 ViewTaskModel task = dataSnapshot.getValue(ViewTaskModel.class);
                                 TasksTypeModel tasksTypeModel = new TasksTypeModel();
