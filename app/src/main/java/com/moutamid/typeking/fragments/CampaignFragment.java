@@ -71,13 +71,12 @@ public class CampaignFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         allTasksArrayList.clear();
-                        if (snapshot.exists()){
+                        if (snapshot.exists()) {
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 ViewTaskModel task = dataSnapshot.getValue(ViewTaskModel.class);
                                 TasksTypeModel tasksTypeModel = new TasksTypeModel();
                                 tasksTypeModel.setViewTaskModel(task);
                                 tasksTypeModel.setType(Constants.TYPE_VIEW);
-
                                 allTasksArrayList.add(tasksTypeModel);
                             }
                             getLikeTasksList();
@@ -99,7 +98,7 @@ public class CampaignFragment extends Fragment {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
+                        if (snapshot.exists()) {
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                                 LikeTaskModel task = dataSnapshot.getValue(LikeTaskModel.class);
@@ -107,9 +106,7 @@ public class CampaignFragment extends Fragment {
                                 TasksTypeModel tasksTypeModel = new TasksTypeModel();
                                 tasksTypeModel.setLikeTaskModel(task);
                                 tasksTypeModel.setType(Constants.TYPE_LIKE);
-
                                 allTasksArrayList.add(tasksTypeModel);
-
                             }
                             getSubscribeTasksList();
                         } else {

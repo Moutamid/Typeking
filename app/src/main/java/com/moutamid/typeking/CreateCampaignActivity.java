@@ -32,6 +32,7 @@ import com.moutamid.typeking.models.LikeTaskModel;
 import com.moutamid.typeking.models.SubscribeTaskModel;
 import com.moutamid.typeking.models.UserDetails;
 import com.moutamid.typeking.models.ViewTaskModel;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -66,6 +67,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         url = Stash.getString(Constants.RECENT_LINK);
+
 
         binding.back.setOnClickListener(v -> onBackPressed());
 
@@ -184,7 +186,6 @@ public class CreateCampaignActivity extends AppCompatActivity {
         });
 
     }
-
     private void uploadViewTask() {
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -574,31 +575,38 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
         YouTubePlayerView youTubePlayerView = binding.youtubePlayerViewFragmentView;
         getLifecycle().addObserver(youTubePlayerView);
-
+        String videoId = Constants.getVideoId(url);
+        Log.e("ResponseURL", "ID " + videoId);
+        Log.e("ResponseURL", "url " + url);
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                String videoId = Constants.getVideoId(url);
                 youTubePlayer.cueVideo(videoId, 0);
+            }
+
+            @Override
+            public void onError(@NonNull YouTubePlayer youTubePlayer, @NonNull PlayerConstants.PlayerError error) {
+                super.onError(youTubePlayer, error);
+                Log.e("ResponseURL", "Error " + error.toString());
             }
         });
 
-
         // INIT PLAYER VIEW
         getVideoTitle.setId(url);
+        Log.e("ResponseURL", getVideoTitle.id);
         getVideoTitle.execute();
-
+        Log.e("ResponseURL", "execute");
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding.youtubePlayerViewFragmentView.release();
-        getVideoTitle.cancel(true);
+//        binding.youtubePlayerViewFragmentView.release();
+//        getVideoTitle.cancel(true);
     }
     @Override
     protected void onStop() {
         super.onStop();
-        getVideoTitle.cancel(true);
+//        getVideoTitle.cancel(true);
     }
     private class GetVideoTitle extends AsyncTask<String, Void, String> {
 
@@ -619,7 +627,9 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
             String videoTitle;
 
-            Log.e("", "Response from url: " + jsonStr);
+            Log.e("ResponseURL", "Response from url: " + jsonStr);
+
+            //https://youtu.be/026vZJ4Gnjc
 
             if (jsonStr != null) {
                 try {
@@ -629,11 +639,11 @@ public class CreateCampaignActivity extends AppCompatActivity {
 
                     thumbnailUrl = o.getString("thumbnail_url");
                     Stash.put(Constants.RECENT_IMAGE, thumbnailUrl);
-
+                    Log.e("ResponseURL", "url: " + thumbnailUrl);
                     return videoTitle;
 
                 } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    Log.e("ResponseURL", "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -647,7 +657,7 @@ public class CreateCampaignActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else {
-                Log.e(TAG, "Couldn't get json from server.");
+                Log.e("ResponseURL", "Couldn't get json from server.");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

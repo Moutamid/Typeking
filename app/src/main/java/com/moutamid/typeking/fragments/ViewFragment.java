@@ -142,7 +142,7 @@ public class ViewFragment extends Fragment {
                         CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer, youTubePlayerView);
                         youTubePlayer.addListener(customPlayerUiController);
 
-                        if (isAutoPlayEnabled) {
+                        if (Stash.getBoolean(Constants.isAutoPlayEnabled, false)) {
                             youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
                         } else {
                             youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
@@ -160,7 +160,7 @@ public class ViewFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (VIP_STATUS) {
                     isAutoPlayEnabled = isChecked;
-                    Stash.put(Constants.isAutoPlayEnabled, isAutoPlayEnabled);
+                    Stash.put(Constants.isAutoPlayEnabled, isChecked);
                 }
             }
         });
@@ -218,7 +218,7 @@ public class ViewFragment extends Fragment {
                 CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer, youTubePlayerView);
                 youTubePlayer.addListener(customPlayerUiController);
 
-                if (isAutoPlayEnabled) {
+                if (Stash.getBoolean(Constants.isAutoPlayEnabled, false)) {
                     youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
                 } else {
                     youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
@@ -272,7 +272,7 @@ public class ViewFragment extends Fragment {
                 public void onYouTubePlayer(@NonNull YouTubePlayer youTubePlayer) {
                     CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer, youTubePlayerView);
                     youTubePlayer.addListener(customPlayerUiController);
-                    if (isAutoPlayEnabled) {
+                    if (Stash.getBoolean(Constants.isAutoPlayEnabled, false)) {
                         youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
                     } else {
                         youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
@@ -356,6 +356,7 @@ public class ViewFragment extends Fragment {
 
     private void uploadAddedVideoViews() {
         if (taskArrayList.size()>0) {
+            Log.d("ResponseURL", "if");
             progressDialog.show();
             Constants.databaseReference().child(Constants.VIEW_TASKS)
                     .child(taskArrayList.get(currentPosition).getTaskKey())
@@ -436,7 +437,9 @@ public class ViewFragment extends Fragment {
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         Stash.put(Constants.CHECK, false);
                                                         progressDialog.dismiss();
-                                                        if (isAutoPlayEnabled) {
+                                                        Log.d("ResponseURL", "added");
+                                                        if (Stash.getBoolean(Constants.isAutoPlayEnabled, false)) {
+                                                            Log.d("ResponseURL", "auto");
                                                             setNewVideoPlayerDetails();
                                                         }
                                                     }
@@ -534,13 +537,13 @@ public class ViewFragment extends Fragment {
                 boolean check = Stash.getBoolean(Constants.CHECK, false);
                 if (check) {
                     check = false;
-                    if (isAutoPlayEnabled) {
+                    if (Stash.getBoolean(Constants.isAutoPlayEnabled, false)) {
                         String url = getNextUrl();
                         youTubePlayerView.getYouTubePlayerWhenReady(youTubePlayer1 -> {
                             CustomPlayerUiController customPlayerUiController = new CustomPlayerUiController(requireContext(), customPlayerUi, youTubePlayer1, youTubePlayerView);
                             youTubePlayer1.addListener(customPlayerUiController);
 
-                            if (isAutoPlayEnabled) {
+                            if (Stash.getBoolean(Constants.isAutoPlayEnabled, false)) {
                                 youTubePlayer.loadVideo( Constants.getVideoId(url), 0f);
                             } else {
                                 youTubePlayer.cueVideo( Constants.getVideoId(url), 0f);
@@ -627,8 +630,10 @@ public class ViewFragment extends Fragment {
     public void onResume() {
         super.onResume();
         boolean check = Stash.getBoolean(Constants.CHECK, false);
+        Log.d("ResponseURL", "Check " + check);
         if (check) {
             uploadAddedVideoViews();
+            Log.d("ResponseURL", "Check true");
         }
     }
 
