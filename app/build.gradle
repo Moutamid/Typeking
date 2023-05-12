@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.moutamid.typeking'
+    namespace 'com.moutamid.tubeking'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.moutamid.typeking"
+        applicationId "com.moutamid.tubeking"
         minSdk 24
         targetSdk 33
         versionCode 1
