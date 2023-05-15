@@ -29,7 +29,7 @@
             android:padding="12sp"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="How to get more subscriber on TypeKing" />
+            android:text="How to get more subscriber on TubeKing" />
 
         <TextView
             android:layout_width="match_parent"
@@ -71,8 +71,7 @@
             android:padding="12sp"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Do TypeKing generate automatic subscriber? Is it safe for
-your channel?" />
+            android:text="Do TubeKing generate automatic subscriber? Is it safe for your channel?" />
 
         <TextView
             android:layout_width="match_parent"
@@ -93,8 +92,7 @@ your channel?" />
             android:padding="12sp"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Why real subscriber is not equal with order when create
-campaign" />
+            android:text="Why real subscriber is not equal with order when create campaign" />
 
         <TextView
             android:layout_width="match_parent"
@@ -115,8 +113,7 @@ campaign" />
             android:padding="12sp"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Can I unsubscribe the channel which I subscribe to earn
-coin?" />
+            android:text="Can I unsubscribe the channel which I subscribe to earn coin?" />
 
         <TextView
             android:layout_width="match_parent"
@@ -137,8 +134,7 @@ coin?" />
             android:padding="12sp"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Why I subscribe the channel on YT app but cannot get coin
-when back to this app." />
+            android:text="Why I subscribe the channel on YT app but cannot get coin when back to this app." />
 
         <TextView
             android:layout_width="match_parent"
