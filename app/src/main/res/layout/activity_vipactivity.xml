@@ -150,6 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="12sp"
                 app:cardCornerRadius="8sp"
+                android:visibility="gone"
                 app:cardElevation="6sp">
 
                 <RelativeLayout
