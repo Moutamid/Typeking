@@ -152,13 +152,14 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
                     subscribeTaskModelArrayList.clear();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         SubscribeTaskModel model = dataSnapshot.getValue(SubscribeTaskModel.class);
-
-                        if (snapshot.child(model.getTaskKey()).child(Constants.SUBSCRIBER_PATH).child(Constants.auth().getCurrentUser().getUid()).exists()) {
-//                        model.setSubscribed(true);
-                        } else {
-                            if (model.getCompletedDate() != null)
-                                if (model.getCompletedDate().equals("error"))
-                                    subscribeTaskModelArrayList.add(model);
+                        if (!Constants.auth().getCurrentUser().getUid().equals(model.getPosterUid())){
+                            if (!snapshot.child(model.getTaskKey()).child(Constants.SUBSCRIBER_PATH).child(Constants.auth().getCurrentUser().getUid()).exists()) {
+                                if (model.getCompletedDate() != null){
+                                    if (model.getCompletedDate().equals("error")) {
+                                        subscribeTaskModelArrayList.add(model);
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -778,48 +779,53 @@ public class SubscribedFragment extends Fragment implements EasyPermissions.Perm
                 progressDialog.show();
 
                 b.videoImageSubscribe.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                with(requireContext())
-                        .asBitmap()
-                        .load(subscribeTaskModelArrayList.get(counter).getThumbnailUrl())
-                        .apply(new RequestOptions()
-                                .placeholder(R.color.light_grey)
-                                .error(R.color.light_grey)
-                        )
-                        .addListener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
 
-                                        b.videoImageSubscribe.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                                        b.videoImageSubscribe.setImageResource(R.drawable.ic_baseline_access_time_filled_24);
+                if (subscribeTaskModelArrayList.size()>counter){
+                    with(requireContext())
+                            .asBitmap()
+                            .load(subscribeTaskModelArrayList.get(counter).getThumbnailUrl())
+                            .apply(new RequestOptions()
+                                    .placeholder(R.color.light_grey)
+                                    .error(R.color.light_grey)
+                            )
+                            .addListener(new RequestListener<Bitmap>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
 
-                                        currentCounter++;
+                                            b.videoImageSubscribe.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                                            b.videoImageSubscribe.setImageResource(R.drawable.ic_baseline_access_time_filled_24);
 
-                                        if (currentCounter >= subscribeTaskModelArrayList.size()) {
-                                            Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();
-                                            b.videoImageSubscribe.setBackgroundResource(0);
-                                        } else {
-                                            int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
-                                            currentPoints = rlow - (rlow / 10);
-                                            Stash.put(Constants.COIN, currentPoints);
-                                            setDataOnViews(currentCounter, false);
+                                            currentCounter++;
+
+                                            if (currentCounter >= subscribeTaskModelArrayList.size()) {
+                                                Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();
+                                                b.videoImageSubscribe.setBackgroundResource(0);
+                                            } else {
+                                                int rlow = Integer.parseInt(subscribeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                                                currentPoints = rlow - (rlow / 10);
+                                                Stash.put(Constants.COIN, currentPoints);
+                                                setDataOnViews(currentCounter, false);
+                                            }
                                         }
-                                    }
-                                });
-                                return false;
-                            }
+                                    });
+                                    return false;
+                                }
 
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                return false;
-                            }
-                        })
-                        .diskCacheStrategy(DATA)
-                        .into(b.videoImageSubscribe);
+                                @Override
+                                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                    return false;
+                                }
+                            })
+                            .diskCacheStrategy(DATA)
+                            .into(b.videoImageSubscribe);
 
-                currentVideoLink = subscribeTaskModelArrayList.get(counter).getVideoUrl();
+                    currentVideoLink = subscribeTaskModelArrayList.get(counter).getVideoUrl();
+                }else {
+                    Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();
+                }
 
                 progressDialog.dismiss();
 

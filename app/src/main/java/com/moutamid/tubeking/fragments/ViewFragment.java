@@ -172,12 +172,14 @@ public class ViewFragment extends Fragment {
                     taskArrayList.clear();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Taskk tasks = dataSnapshot.getValue(Taskk.class);
-                        if (snapshot.child(tasks.getTaskKey()).child(Constants.VIEWER_PATH).child(Constants.auth().getCurrentUser().getUid()).exists()) {
-//                        model.setSubscribed(true);
-                        } else {
-                            if (tasks.getCompletedDate() != null)
-                                if (tasks.getCompletedDate().equals("error"))
-                                    taskArrayList.add(tasks);
+                        if (!Constants.auth().getCurrentUser().getUid().equals(tasks.getPosterUid())){
+                            if (!snapshot.child(tasks.getTaskKey()).child(Constants.VIEWER_PATH).child(Constants.auth().getCurrentUser().getUid()).exists()) {
+                                if (tasks.getCompletedDate() != null){
+                                    if (tasks.getCompletedDate().equals("error")){
+                                        taskArrayList.add(tasks);
+                                    }
+                                }
+                            }
                         }
                     }
                     progressDialog.dismiss();

@@ -97,7 +97,6 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
     String currentVideoLink;
     ProgressDialog mProgress;
     String currentVideoId = "";
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     ArrayList<LikeTaskModel> likeTaskModelArrayList = new ArrayList<>();
     private ProgressDialog progressDialog;
     int currentCounter = 0;
@@ -132,14 +131,15 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                         LikeTaskModel model = dataSnapshot.getValue(LikeTaskModel.class);
-
-                        if (snapshot.child(model.getTaskKey()).child(Constants.LIKERS_PATH).child(mAuth.getUid()).exists()) {
-//                        model.setSubscribed(true);
-                        } else {
-                            likeTaskModelArrayList.add(model);
+                        if (!Constants.auth().getCurrentUser().getUid().equals(model.getPosterUid())){
+                            if (!snapshot.child(model.getTaskKey()).child(Constants.LIKERS_PATH).child(Constants.auth().getCurrentUser().getUid()).exists()) {
+                                if (model.getCompletedDate() != null){
+                                    if (model.getCompletedDate().equals("error")){
+                                        likeTaskModelArrayList.add(model);
+                                    }
+                                }
+                            }
                         }
-
-
                     }
                     if (likeTaskModelArrayList.size() > 0) {
                         int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
@@ -231,8 +231,13 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
 
                                     if (currentCounter >= likeTaskModelArrayList.size()) {
                                         Toast.makeText(requireContext(), "End of Task!", Toast.LENGTH_SHORT).show();
-
-                                    } else setDataOnViews(currentCounter, false);
+                                        binding.thumbnail.setImageResource(0);
+                                    } else {
+                                        int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                                        currentPoints = rlow - (rlow / 10);
+                                        Stash.put(Constants.COIN, currentPoints);
+                                        setDataOnViews(currentCounter, false);
+                                    }
 
                                 }
                             });
@@ -295,43 +300,53 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
                 progressDialog.show();
 
                 binding.thumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                with(requireContext())
-                        .asBitmap()
-                        .load(likeTaskModelArrayList.get(counter).getThumbnailUrl())
-                        .apply(new RequestOptions()
-                                .placeholder(R.color.light_grey)
-                                .error(R.color.light_grey)
-                        )
-                        .addListener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        isError++;
+                
+                if (likeTaskModelArrayList.size()>counter){
+                    with(requireContext())
+                            .asBitmap()
+                            .load(likeTaskModelArrayList.get(counter).getThumbnailUrl())
+                            .apply(new RequestOptions()
+                                    .placeholder(R.color.light_grey)
+                                    .error(R.color.light_grey)
+                            )
+                            .addListener(new RequestListener<Bitmap>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            isError++;
 //                                        databaseReference.child(Constants.LIKE_TASKS)
 //                                                .child(likeTaskModelArrayList.get(counter)
 //                                                        .getTaskKey()).removeValue();
-                                        currentCounter++;
+                                            currentCounter++;
 
-                                        if (currentCounter >= likeTaskModelArrayList.size()) {
-                                            Toast.makeText(requireContext(), "End of Task!", Toast.LENGTH_SHORT).show();
+                                            if (currentCounter >= likeTaskModelArrayList.size()) {
+                                                Toast.makeText(requireContext(), "End of Task!", Toast.LENGTH_SHORT).show();
 
-                                        } else setDataOnViews(currentCounter, false);
-                                    }
-                                });
-                                return false;
-                            }
+                                            } else {
+                                                int rlow = Integer.parseInt(likeTaskModelArrayList.get(currentCounter).getTotalViewTimeQuantity());
+                                                currentPoints = rlow - (rlow / 10);
+                                                Stash.put(Constants.COIN, currentPoints);
+                                                setDataOnViews(currentCounter, false);
+                                            }
+                                        }
+                                    });
+                                    return false;
+                                }
 
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                return false;
-                            }
-                        })
-                        .diskCacheStrategy(DATA)
-                        .into(binding.thumbnail);
+                                @Override
+                                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                    return false;
+                                }
+                            })
+                            .diskCacheStrategy(DATA)
+                            .into(binding.thumbnail);
 
-                currentVideoLink = likeTaskModelArrayList.get(counter).getVideoUrl();
+                    currentVideoLink = likeTaskModelArrayList.get(counter).getVideoUrl();
+                } else {
+                    Toast.makeText(requireContext(), "End of task", Toast.LENGTH_SHORT).show();
+                }
 
                 progressDialog.dismiss();
 
@@ -560,14 +575,14 @@ public class LikedFragment extends Fragment implements EasyPermissions.Permissio
     }
 
     private void uploadAddedCoins() {
-        Constants.databaseReference().child(Constants.USER).child(mAuth.getCurrentUser().getUid())
+        Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid())
                 .child("coins").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                         int value = snapshot.getValue(Integer.class);
 
-                        Constants.databaseReference().child(Constants.USER).child(mAuth.getCurrentUser().getUid())
+                        Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid())
                                 .child("coins")
                                 .setValue(value + currentPoints)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
