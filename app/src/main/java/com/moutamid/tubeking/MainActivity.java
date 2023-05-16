@@ -37,6 +37,9 @@ import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
     ActivityMainBinding binding;
     int coin = 0;
     private RewardedInterstitialAd rewardedInterstitialAd;
+    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInOptions gso;
     public static AdRequest adRequest = new AdRequest.Builder().build();
 
     @Override
@@ -76,6 +81,12 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
         toggle.syncState();
 
         updateNavHead(binding.navView);
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         binding.toogle.setOnClickListener(v -> {
             binding.drawLayout.openDrawer(GravityCompat.START);
@@ -116,9 +127,13 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch(item.getItemId()){
                 case R.id.nav_logout:
-                    Constants.auth().signOut();
-                    startActivity(new Intent(MainActivity.this, SplashScreenActivity.class));
-                    finish();
+                    mGoogleSignInClient.signOut().addOnSuccessListener(unused -> {
+                        Constants.auth().signOut();
+                        startActivity(new Intent(MainActivity.this, SplashScreenActivity.class));
+                        finish();
+                    }).addOnFailureListener(e -> {
+                        Toast.makeText(MainActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                    });
                     break;
                 case R.id.nav_vip:
                     startActivity(new Intent(MainActivity.this, VIPActivity.class));
