@@ -8,12 +8,26 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetailsResponseListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.QueryProductDetailsParams;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.PurchaseInfo;
 import com.fxn.stash.Stash;
+import com.google.common.collect.ImmutableList;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -21,18 +35,24 @@ import com.moutamid.tubeking.databinding.ActivityVipactivityBinding;
 import com.moutamid.tubeking.models.UserDetails;
 import com.moutamid.tubeking.utilis.Constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VIPActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler {
     ActivityVipactivityBinding binding;
+    BillingProcessor bp;
+
+    static final String TAG = "InAppPurchaseTag";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityVipactivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Constants.calledIniti(this);
-        BillingProcessor bp;
 
         bp = BillingProcessor.newBillingProcessor(this, Constants.LICENSE_KEY, this);
         bp.initialize();
+
 
         if (!Stash.getBoolean(Constants.VIP_STATUS)){
             Constants.loadIntersAD(VIPActivity.this, VIPActivity.this);
@@ -44,10 +64,10 @@ public class VIPActivity extends AppCompatActivity implements BillingProcessor.I
         }
 
         binding.monthSubscription.setOnClickListener(v -> {
-            VipUpdate();
+            bp.purchase(VIPActivity.this, Constants.VIP_MONTH);
         });
         binding.ThreeMonthSubscription.setOnClickListener(v -> {
-            VipUpdate();
+            bp.purchase(VIPActivity.this, Constants.VIP_YEAR);
         });
 
 
@@ -102,6 +122,7 @@ public class VIPActivity extends AppCompatActivity implements BillingProcessor.I
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable PurchaseInfo details) {
+        VipUpdate();
         Toast.makeText(this, "Purchased", Toast.LENGTH_SHORT).show();
     }
 
@@ -112,11 +133,20 @@ public class VIPActivity extends AppCompatActivity implements BillingProcessor.I
 
     @Override
     public void onBillingError(int errorCode, @Nullable Throwable error) {
-
+        Toast.makeText(VIPActivity.this, "onBillingError: code: " + errorCode + " \n" + error.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onBillingInitialized() {
 
     }
+
+    @Override
+    protected void onDestroy() {
+        if (bp != null) {
+            bp.release();
+        }
+        super.onDestroy();
+    }
+
 }

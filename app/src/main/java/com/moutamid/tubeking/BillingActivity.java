@@ -20,7 +20,7 @@ import com.moutamid.tubeking.databinding.ActivityBillingBinding;
 import com.moutamid.tubeking.models.UserDetails;
 import com.moutamid.tubeking.utilis.Constants;
 
-public class BillingActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler  {
+public class BillingActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler {
     ActivityBillingBinding binding;
     BillingProcessor bp;
 
@@ -40,7 +40,7 @@ public class BillingActivity extends AppCompatActivity implements BillingProcess
             finish();
         });
 
-        if (!Stash.getBoolean(Constants.VIP_STATUS)){
+        if (!Stash.getBoolean(Constants.VIP_STATUS)) {
             Constants.loadIntersAD(BillingActivity.this, BillingActivity.this);
             Constants.showNativeAd(BillingActivity.this, binding.myTemplate);
             Constants.showBannerAd(binding.adView);
@@ -50,28 +50,33 @@ public class BillingActivity extends AppCompatActivity implements BillingProcess
         }
 
         binding.coin4000.setOnClickListener(v -> {
-            buyCoin(4000);
+            bp.purchase(BillingActivity.this, Constants.COIN_FOUR_THOUSAND);
+
         });
         binding.coin25000.setOnClickListener(v -> {
-            buyCoin(25000);
+            bp.purchase(BillingActivity.this, Constants.COIN_TWENTY_FIVE_THOUSAND);
+
         });
         binding.coin60000.setOnClickListener(v -> {
-            buyCoin(60000);
+            bp.purchase(BillingActivity.this, Constants.COIN_SIXTY_THOUSAND);
+
         });
         binding.coin400k.setOnClickListener(v -> {
-            buyCoin(400000);
+            bp.purchase(BillingActivity.this, Constants.COIN_FOUR_HUNDRED_THOUSAND);
+
         });
         binding.coin100k.setOnClickListener(v -> {
-            buyCoin(1000000);
+            bp.purchase(BillingActivity.this, Constants.COIN_TEN_HUNDRED_THOUSAND);
+
         });
 
         Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
+                        if (snapshot.exists()) {
                             UserDetails userDetails = snapshot.getValue(UserDetails.class);
-                            binding.coin.setText(userDetails.getCoins()+"");
+                            binding.coin.setText(userDetails.getCoins() + "");
                             coin = userDetails.getCoins();
                             Stash.put(Constants.CURRENT_COINS, userDetails.getCoins());
                         }
@@ -88,7 +93,16 @@ public class BillingActivity extends AppCompatActivity implements BillingProcess
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable PurchaseInfo details) {
-        Toast.makeText(this, "Purchased", Toast.LENGTH_SHORT).show();
+        if (productId.equals(Constants.COIN_FOUR_THOUSAND))
+            buyCoin(4000);
+        if (productId.equals(Constants.COIN_TWENTY_FIVE_THOUSAND))
+            buyCoin(25000);
+        if (productId.equals(Constants.COIN_SIXTY_THOUSAND))
+            buyCoin(60000);
+        if (productId.equals(Constants.COIN_FOUR_HUNDRED_THOUSAND))
+            buyCoin(400000);
+        if (productId.equals(Constants.COIN_TEN_HUNDRED_THOUSAND))
+            buyCoin(1000000);
     }
 
     @Override
