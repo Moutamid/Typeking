@@ -75,7 +75,7 @@ public class Constants {
     private static InterstitialAd mInterstitialAd;
     public static AdRequest adRequest = new AdRequest.Builder().build();
 
-    public static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApB3Pb51I49Y+CBRl92py1a00hyE7TDj0G/Iv2/mFT1enQWipoD0Jodvfv2AgipRM87hm0XJYhBV2ovYy6HWYp0tVMNT33jIa+kBJZGH9pkMJHvIkBQy+0XndSHIc95QiLC9iZddSYDGqzBcwmzyBBOwcPdBdF0G9B+mx+fz+XVTgn3mN6tk8jIFjU+M7kIOo4/E7qyFtM5tNzNOIVlxgB2mtg9siSSx8yaR11PCjHpaYxxFJd3tyEUomVV83KN7sPbTjgP008ziCx5532eCVt/8o5ZOGJaddHDuKCQEcKlgaM3zyEa9Kuk+QxHh5TqHWpNVKdeLQ6X033kd+pJqBQQIDAQAB";
+    public static final String LICENSE_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArBueEiTWfZk7O+BE104DZiZh6Dj8tIMJdZter0tO2KH0MUzn1UB14nrg6bb5IGup29NEvG6UI0ZelHgxClkYvLxzgXjagFgFKN46U6kijHxsccY9evn06NWNyJbPFoAkTQyVIPk44SBufx7g4H5f0azOtY28DL3fg5nvLDJ7yPAejGSvdZXuiVGopwS1A05QrjrgA6ol1YOUzxu22Vanb4ncIDTdF35MA2arbVf74fYFcqkJgWcfWkENRDxoj8IPo1tzWH2rO1/vaILmosJKd1SOrMhrmmyLita0AzJXH/d59Gwu3ed53Ct/Qcq9bDIX3TOALPdQ+NaRkapT2w0twQIDAQAB";
     public static final  String VIP_MONTH = "vip.month.com.moutamid.tubeking";
     public static final  String VIP_YEAR = "vip.year.com.moutamid.tubeking";
     public static final  String COIN_FOUR_THOUSAND = "coin.four.thousand.com.moutamid.tubeking";
