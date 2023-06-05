@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 1,
-      "versionName": "1.0",
-      "outputFile": "TubeKing-1.0-release.apk"
+      "versionCode": 3,
+      "versionName": "1.2",
+      "outputFile": "TubeKing-1.2-release.apk"
     }
   ],
   "elementType": "File"
