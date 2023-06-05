@@ -64,10 +64,10 @@ public class VIPActivity extends AppCompatActivity implements BillingProcessor.I
         }
 
         binding.monthSubscription.setOnClickListener(v -> {
-            bp.purchase(VIPActivity.this, Constants.VIP_MONTH);
+            bp.subscribe(VIPActivity.this, Constants.VIP_MONTH);
         });
         binding.ThreeMonthSubscription.setOnClickListener(v -> {
-            bp.purchase(VIPActivity.this, Constants.VIP_YEAR);
+            bp.subscribe(VIPActivity.this, Constants.VIP_YEAR);
         });
 
 
@@ -125,6 +125,7 @@ public class VIPActivity extends AppCompatActivity implements BillingProcessor.I
         VipUpdate();
         Toast.makeText(this, "Purchased", Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void onPurchaseHistoryRestored() {

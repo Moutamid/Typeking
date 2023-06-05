@@ -97,7 +97,8 @@ public class ViewFragment extends Fragment {
                         if (snapshot.exists()) {
                             UserDetails userDetails = snapshot.getValue(UserDetails.class);
                             CurrentCoins = userDetails.getCoins();
-                            VIP_STATUS = userDetails.isVipStatus();
+                            VIP_STATUS = Stash.getBoolean(Constants.VIP_STATUS);
+                           // Toast.makeText(requireContext(), ""+VIP_STATUS, Toast.LENGTH_SHORT).show();
                             Stash.put(Constants.CURRENT_COINS, userDetails.getCoins());
                         }
                     }

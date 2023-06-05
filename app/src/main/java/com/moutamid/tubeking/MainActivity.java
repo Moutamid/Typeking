@@ -3,6 +3,7 @@ package com.moutamid.tubeking;
 import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -25,6 +26,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.PurchaseInfo;
+import com.anjlab.android.iab.v3.SkuDetails;
 import com.bumptech.glide.Glide;
 import com.fxn.stash.Stash;
 import com.google.android.gms.ads.AdError;
@@ -50,20 +54,21 @@ import com.moutamid.tubeking.databinding.ActivityMainBinding;
 import com.moutamid.tubeking.fragments.MainFragment;
 import com.moutamid.tubeking.models.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements OnUserEarnedRewardListener {
+public class MainActivity extends AppCompatActivity implements OnUserEarnedRewardListener, BillingProcessor.IBillingHandler {
     ActivityMainBinding binding;
     int coin = 0;
     private RewardedInterstitialAd rewardedInterstitialAd;
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInOptions gso;
     public static AdRequest adRequest = new AdRequest.Builder().build();
-
+    BillingProcessor bp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
         setContentView(binding.getRoot());
         Constants.checkApp(this);
         Constants.calledIniti(this);
+
+        bp = BillingProcessor.newBillingProcessor(this, Constants.LICENSE_KEY, this);
+        bp.initialize();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
@@ -119,6 +127,32 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                 });
 
         getSupportFragmentManager().beginTransaction().add(R.id.framelayout, new MainFragment()).commit();
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add(Constants.VIP_MONTH);
+        ids.add(Constants.VIP_YEAR);
+        bp.getSubscriptionsListingDetailsAsync(ids, new BillingProcessor.ISkuDetailsResponseListener() {
+            @Override
+            public void onSkuDetailsResponse(@Nullable List<SkuDetails> products) {
+                Log.d("PURSS", "Size : " + products.size());
+                for (int i = 0; i < products.size(); i++){
+                    boolean isSub = products.get(i).isSubscription;
+                    Stash.put(Constants.VIP_STATUS, isSub);
+                }
+            }
+
+            @Override
+            public void onSkuDetailsError(String error) {
+
+            }
+        });
+        Log.d("PURSS", "init : " + bp.isInitialized());
+
+        if (bp.isSubscribed(Constants.VIP_MONTH) || bp.isSubscribed(Constants.VIP_YEAR)){
+            Stash.put(Constants.VIP_STATUS, true);
+        } else {
+            Stash.put(Constants.VIP_STATUS, false);
+        }
+
 
     }
 
@@ -364,5 +398,25 @@ public class MainActivity extends AppCompatActivity implements OnUserEarnedRewar
                 }).addOnFailureListener(e -> {
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    @Override
+    public void onProductPurchased(@NonNull String productId, @Nullable PurchaseInfo details) {
+
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, @Nullable Throwable error) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
     }
 }
